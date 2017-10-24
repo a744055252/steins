@@ -26,12 +26,6 @@ public class AcfunArticleUtil {
     /** 文章游戏消息 */
     private static List<ACMsg> gameMsgList;
 
-    /** 娱乐日榜 */
-    private static List<ACMsg> recrDayMsgList;
-
-    /** 娱乐月榜 */
-    private static List<ACMsg> recrMonthMsgList;
-
     /** 香蕉榜 */
     private static List<ACMsg> bananaMsgList;
 
@@ -41,8 +35,6 @@ public class AcfunArticleUtil {
         animeMsgList = new ArrayList<ACMsg>();
         cartoonMsgList = new ArrayList<ACMsg>();
         gameMsgList = new ArrayList<ACMsg>();
-        recrDayMsgList = new ArrayList<ACMsg>();
-        recrMonthMsgList = new ArrayList<ACMsg>();
         bananaMsgList = new ArrayList<ACMsg>();
     }
 
@@ -52,8 +44,6 @@ public class AcfunArticleUtil {
         animeMsgList.clear();
         cartoonMsgList.clear();
         gameMsgList.clear();
-        recrDayMsgList.clear();
-        recrMonthMsgList.clear();
         bananaMsgList.clear();
         init();
     }
@@ -96,6 +86,11 @@ public class AcfunArticleUtil {
             temp = a.attr("title").split("\r");
             title = temp[0];
             auther = temp[1].substring(2);
+
+            if(!temp[2].contains("/") || !temp[2].contains("点击") || !temp[2].contains("评论")){
+                continue;
+            }
+
             createTime = temp[2].substring(3, temp[2].indexOf("/")-1);
             click = temp[2].substring(temp[2].indexOf("点击")+3, temp[2].lastIndexOf("/")-1);
             review = temp[2].substring(temp[2].indexOf("评论")+3, temp[2].length()-1);
@@ -139,6 +134,10 @@ public class AcfunArticleUtil {
             fig = element.select("figcaption>b>a").first();
             temp = fig.attr("title").split("\r");
             title = temp[0];
+            if(!temp[2].contains("/") || !temp[2].contains("点击:") || !temp[2].contains("评论:")
+                    ||!temp[2].contains("UP:") || temp[2].contains("发布于")){
+                continue;
+            }
             auther = temp[1].substring(temp[1].indexOf("UP:")+3);
             createTime = temp[2].substring(temp[2].indexOf("发布于")+3, temp[2].indexOf("/")-1);
             click = temp[2].substring(temp[2].indexOf("点击:")+3, temp[2].lastIndexOf("/")-1);
@@ -192,20 +191,6 @@ public class AcfunArticleUtil {
             init();
         }
         return gameMsgList;
-    }
-
-    public static List<ACMsg> getRecrDayMsgList() throws Exception {
-        if(recrDayMsgList.isEmpty()){
-            init();
-        }
-        return recrDayMsgList;
-    }
-
-    public static List<ACMsg> getRecrMonthMsgList() throws Exception {
-        if(recrMonthMsgList.isEmpty()){
-            init();
-        }
-        return recrMonthMsgList;
     }
 
     public static List<ACMsg> getBananaMsgList() throws Exception {
