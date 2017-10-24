@@ -3,10 +3,10 @@ package com.guanhuan.spider.utils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 /**
  * 模拟浏览器
@@ -19,49 +19,77 @@ public class ClientManager {
     private static final long KEEP_RUNNING = -1;
 
     /** httpclient对象 */
-    private CloseableHttpClient httpclient = null;
+    private static volatile CloseableHttpClient client = null;
 
     /** 浏览器运行时长,单位:milliseconds*/
     private static long runningTime = 0;
 
+    private ClientManager(){}
+
     /**
-     * 创建一个模拟浏览器
-     * @Date: 16:28 2017/10/24
-     * @param time 模拟浏览器运行的时长,单位为milliseconds
+     * 获取一个可以定时关闭的浏览器对象
+     * @Date: 17:37 2017/10/24
+     * @param time 浏览器运行时长
      */
-    public ClientManager(long time){
-        httpclient = HttpClients.createDefault();
-        System.out.println("client running ! time:" + time);
+    public static CloseableHttpClient getClient(long time){
+
         runningTime = time;
-        //设置定时关闭
-        new Timer().schedule(new CloseTask(), runningTime);
 
+        if(client == null){
+            synchronized (ClientManager.class){
+                if(client == null){
+                    client = HttpClients.createDefault();
+                }
+            }
+        }
+
+        //设置定时关闭任务
+        if( time != KEEP_RUNNING){
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if(client != null) {
+                        try {
+                            close();
+                            System.out.println("client close！");
+                            client.getConnectionManager();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, time);
+        }
+
+        return client;
     }
 
     /**
-     * 创建一个模拟浏览器
-     * @Date: 16:31 2017/10/24
-     * @param time 模拟浏览器运行的时长
-     * @param unit 模拟浏览器运行的时长的单位,使用TimeUnit传入
+     * 获取一个可以定时关闭的浏览器对象
+     * @Date: 17:39 2017/10/24
+     * @param time 运行时长
+     * @param unit 运行时长的单位
      */
-    public ClientManager(long time, TimeUnit unit){
-        this(unit.toMillis(time));
+    public static CloseableHttpClient getClient(long time, TimeUnit unit){
+        return getClient(unit.toMillis(time));
     }
 
     /**
-     * 定时关闭器，用于关闭模拟浏览器
-     * @Auther: guanhuan_li
-     * @Date: 16:41 2017/10/24
+     * 关闭浏览器
+     * @Date: 17:43 2017/10/24
+     * @param
      */
-    private class CloseTask extends TimerTask{
-
-        @Override
-        public void run() {
-            System.out.println("Client is close");
+    public static void close() throws IOException {
+        if(client != null){
+            client.close();
+            client = null;
         }
     }
 
-    public static void main(String[] args){
-        ClientManager clientManager = new ClientManager(5, TimeUnit.SECONDS);
+    public static void main(String[] args) throws InterruptedException {
+        CloseableHttpClient client = ClientManager.getClient(5, TimeUnit.SECONDS);
+        System.out.println("before:"+client);
+        Thread.sleep(8*1000);
+        System.out.println("after:"+client);
     }
 }
