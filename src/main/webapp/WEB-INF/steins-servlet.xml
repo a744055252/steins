@@ -39,6 +39,17 @@
 		</property>
 	</bean>
 
+	<!-- 爬虫浏览器 -->
+	<bean id="client" class="com.guanhuan.spider.service.HttpClientService">
+		<!--出错控制类-->
+		<property name="handler">
+			<bean class="com.guanhuan.spider.bean.DefaultHander"/>
+		</property>
+		<!--最大连接数-->
+		<property name="maxTotal" value="200"/>
+		<property name="maxPerRoute" value="200"/>
+	</bean>
+
 	<!-- 配置校验器 -->
 	<bean id="validator"
 		  class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">

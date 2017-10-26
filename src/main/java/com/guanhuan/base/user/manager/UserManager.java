@@ -3,6 +3,7 @@ package com.guanhuan.base.user.manager;
 import com.guanhuan.common.db.HibernateAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * @date 2017年8月16日
  *
  */
-@Component
+@Repository
 public class UserManager {
 
 	@Autowired

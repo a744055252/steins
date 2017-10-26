@@ -3,6 +3,7 @@ package com.guanhuan.spider.manager;
 import com.guanhuan.common.db.HibernateAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @Description: ACMsgManager
  * @Date: 2017/10/15/015 21:23
  **/
-@Component
+@Repository
 public class ACMsgManager {
 
     @Autowired

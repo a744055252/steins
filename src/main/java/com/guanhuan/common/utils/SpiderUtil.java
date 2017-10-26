@@ -10,8 +10,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -161,7 +160,21 @@ public class SpiderUtil {
 			throw new Exception("没有找到配置文件或者配置属性");
 		return attrValue;
 	}
-	
+
+	public static Map<String, String> getProperties(String path) throws Exception{
+		ResourceBundle resource = ResourceBundle.getBundle(path);
+		String key ;
+		String value;
+		Map<String, String> head = new HashMap<String, String>();
+		Enumeration<String> allKey = resource.getKeys();
+		while (allKey.hasMoreElements()){
+			key = allKey.nextElement();
+			value = resource.getString(key);
+			head.put(key,value);
+		}
+		return head;
+	}
+
 	public static void main(String[] args) throws Exception{
 //		String s = "a s  d d    d";
 //		saveData(s, "f:\\2.txt", true);

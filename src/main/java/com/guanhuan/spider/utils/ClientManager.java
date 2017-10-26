@@ -1,7 +1,9 @@
 package com.guanhuan.spider.utils;
 
+import org.apache.http.conn.HttpClientConnectionManager;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -23,6 +25,8 @@ public class ClientManager {
 
     /** 浏览器运行时长,单位:milliseconds*/
     private static long runningTime = 0;
+
+    private static HttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
 
     private ClientManager(){}
 
