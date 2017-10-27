@@ -56,7 +56,6 @@ public class ClientManager {
                         try {
                             close();
                             System.out.println("client close！");
-                            client.getConnectionManager();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -86,7 +85,6 @@ public class ClientManager {
     public static void close() throws IOException {
         if(client != null){
             client.close();
-            client = null;
         }
     }
 

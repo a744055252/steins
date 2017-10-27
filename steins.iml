@@ -100,5 +100,8 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-http:9.4.5.v20170502" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.4.5.v20170502" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.4.5.v20170502" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:unknown" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:unknown" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.jayway.jsonpath:json-path:unknown" level="project" />
   </component>
 </module>

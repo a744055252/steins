@@ -12,15 +12,12 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -46,7 +43,7 @@ public class HttpClientDemo {
         // 设置2个post参数，一个是scope、一个是q
         List<NameValuePair> parameters = new ArrayList<NameValuePair>();
         parameters.add(new BasicNameValuePair("username", "744055252@qq.com"));
-        parameters.add(new BasicNameValuePair("password", "845650111"));
+        parameters.add(new BasicNameValuePair("password", ""));
         // 构造一个form表单式的实体
         UrlEncodedFormEntity formEntity = null;
         CloseableHttpResponse response = null;

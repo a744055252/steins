@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2017年8月17日
  *
  */
-@Controller
+@RestController
 @RequestMapping("/User")
 public class UserController {
 	
@@ -44,10 +44,9 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@Transactional
-	@RequestMapping(value="/add", method=RequestMethod.POST)
+	@RequestMapping(value="/User", method=RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView add(HttpSession session, @Validated @ModelAttribute User user, BindingResult bindingResult) throws Exception {
+	public ModelAndView addUser(HttpSession session, @Validated @ModelAttribute User user, BindingResult bindingResult) throws Exception {
 		logger.debug("add running!");
 
 		if(bindingResult.hasErrors()){
@@ -101,9 +100,9 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping("/findUser/{userId}")
+	@RequestMapping(value = "/User/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public User findUser(HttpSession session, @PathVariable long userId) {
+	public User getUser(HttpSession session, @PathVariable long userId) {
 		//当前用户
 		User loginUser = (User)session.getAttribute("LoginUser");
 		if(loginUser == null) {

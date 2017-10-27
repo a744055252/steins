@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
 
-	<property name="LOG_HOME" value="E:/workspace/server/moba-log/src/main/webapp" />
+	<property name="LOG_HOME" value="C:/log" />
 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder charset="GBK">
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{1024} - %msg%n

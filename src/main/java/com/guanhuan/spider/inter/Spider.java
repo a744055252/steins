@@ -1,6 +1,10 @@
 package com.guanhuan.spider.inter;
 
+import com.guanhuan.spider.manager.SpiderUser;
+
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: liguanhuan_a@163.com
@@ -9,26 +13,41 @@ import java.util.List;
  **/
 public interface Spider {
 
-    //获取当前商品以后的num个商品
-    List<?> getMessages(int num);
+    String TERRACE_ACFUN = "acfun";
 
-    //获取已经爬取好的商品index开始位置，num数量
-    List<?> getMessages(int index, int num);
+    int STATE_EFFECTIVE = 1;
 
-    //获得所有以及爬取的商品
-    List<?> getAllMessages();
+    int STATE_INVALID = -1;
 
-    //得到平台
+    /**
+     * 当爬取的信息需要登录时，进行登录
+     * @Date: 16:50 2017/10/27
+     */
+    boolean login() throws IOException;
+
+    /**
+     * 爬取数据并存入数据库
+     * @Date: 16:51 2017/10/27
+     */
+    boolean running();
+
+    /**
+     * 得到平台
+     * @Date: 17:00 2017/10/27
+     */
     String getTerrace();
 
-    //得到爬取商品总数
-    int getCurrentSize();
-
+    /**
+     * 得到平台
+     * @Date: 17:00 2017/10/27
+     */
     boolean isEmpty();
 
+    /**
+     * 得到爬取商品的总数
+     * @Date: 17:00 2017/10/27
+     */
     int size();
 
-    //执行过的查询链接
-    List<String> getQuery();
 
 }

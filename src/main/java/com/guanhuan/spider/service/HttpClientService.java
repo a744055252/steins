@@ -1,12 +1,16 @@
 package com.guanhuan.spider.service;
 
+import org.apache.http.HttpRequest;
 import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 
 /**
  * httpclient服务
@@ -45,25 +49,25 @@ public class HttpClientService implements DisposableBean {
                 .build();
     }
 
+    public void release() {
+        manager.closeExpiredConnections();
+    }
+
     public void destroy() throws Exception {
         if(manager != null)
             manager.shutdown();
+    }
+
+    public CloseableHttpResponse execute(HttpRequestBase request) throws IOException {
+        return client.execute(request);
     }
 
     public CloseableHttpClient getClient() {
         return client;
     }
 
-    public void setClient(CloseableHttpClient client) {
-        this.client = client;
-    }
-
     public PoolingHttpClientConnectionManager getManager() {
         return manager;
-    }
-
-    public void setManager(PoolingHttpClientConnectionManager manager) {
-        this.manager = manager;
     }
 
     public HttpRequestRetryHandler getHandler() {
@@ -91,4 +95,5 @@ public class HttpClientService implements DisposableBean {
         manager.setDefaultMaxPerRoute(maxPerRoute);
         this.maxPerRoute = maxPerRoute;
     }
+
 }
