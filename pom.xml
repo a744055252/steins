@@ -235,6 +235,13 @@
       <version>4.12</version>
     </dependency>
 
+    <!--spirng data jpa-->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>2.0.0.RELEASE</version>
+    </dependency>
+
     <!--restful Spring mvc-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -250,6 +257,13 @@
       <artifactId>json-path</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>io.jsonwebtoken</groupId>
+      <artifactId>jjwt</artifactId>
+      <version>0.9.0</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>steins</finalName>

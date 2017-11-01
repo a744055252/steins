@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -26,6 +27,7 @@ public class User {
      * 用户id
      */
     @Id
+    @GeneratedValue
     private long userId;
 
     /**
