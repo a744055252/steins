@@ -12,8 +12,15 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.guanhuan.spider.manager.SpiderUser;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @Author: liguanhuan_a@163.com
@@ -21,6 +28,11 @@ import org.jsoup.nodes.Document;
  * @Date: 2017/10/15/015 18:05
  **/
 public class SpiderUtil {
+
+	/** 超时时间 */
+	private static final int TIMEOUT = 8 * 1000;
+
+	private static final Logger logger = LoggerFactory.getLogger(SpiderUtil.class);
 
 	/**
 	 * @Author: liguanhuan_a@163.com
@@ -161,7 +173,7 @@ public class SpiderUtil {
 		return attrValue;
 	}
 
-	public static Map<String, String> getProperties(String path) throws Exception{
+	public static Map<String, String> getProperties(String path) {
 		ResourceBundle resource = ResourceBundle.getBundle(path);
 		String key ;
 		String value;
@@ -173,6 +185,58 @@ public class SpiderUtil {
 			head.put(key,value);
 		}
 		return head;
+	}
+
+	/**
+	 * 增加消息头和相关配置
+	 * @Date: 15:43 2017/10/26
+	 * @param httpRequestBase
+	 * @param headPath
+	 */
+	private static void config(HttpRequestBase httpRequestBase, String headPath, int timeout) {
+		Map<String, String> headMap = null;
+
+		//读取配置文件
+		headMap = SpiderUtil.getProperties(headPath);
+
+		//设置消息头
+		for(Map.Entry<String, String> map : headMap.entrySet()){
+			httpRequestBase.setHeader(map.getKey(), map.getValue());
+		}
+
+		//设置请求的超时设置
+		RequestConfig requestConfig = RequestConfig.custom()
+				.setConnectTimeout(timeout)
+				.setConnectionRequestTimeout(timeout)
+				.setSocketTimeout(timeout)
+				.build();
+
+		httpRequestBase.setConfig(requestConfig);
+	}
+
+	public static void config(HttpRequestBase httpRequestBase, String headPath) {
+		config(httpRequestBase, headPath, TIMEOUT);
+	}
+
+
+	/**
+	 * 对response的返回结果进行过滤，返回码为200时返回true
+	 * @param: [response, result] result保存结果
+	 * @Date: 2017/10/28/028 12:05
+	 **/
+	public static boolean checkCode(HttpRequestBase requestBase, CloseableHttpResponse response, SpiderUser user, String result) throws IOException {
+		boolean flag = false;
+		switch (response.getStatusLine().getStatusCode()){
+			case 200 :
+				result = EntityUtils.toString(response.getEntity(),"UTF-8");
+				flag = true;
+				break;
+			case 404 :
+				logger.error(requestBase.getURI()+"_"+user.getAccount()+":"+user.getPassword());
+				break;
+
+		}
+		return flag;
 	}
 
 	public static void main(String[] args) throws Exception{

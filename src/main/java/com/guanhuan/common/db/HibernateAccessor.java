@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class HibernateAccessor {
 
-	@Autowired
+//	@Autowired
 	private SessionFactory sessionFactory;
 	private Session session = null;
 	

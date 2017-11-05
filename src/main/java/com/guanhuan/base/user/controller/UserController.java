@@ -71,13 +71,9 @@ public class UserController {
 		String currentTime = DateUtil.getCurrentYMDHMSDate();
 		user.setCreateTime(currentTime);
 		user.setUpdateTime(currentTime);
-		if(userService.add(user)) {
-			logger.info("新增用户"+user.toString());
-			return new ModelAndView("login");
-		}
-		else {
-			return new ModelAndView("formatError");
-		}
+		userService.add(user);
+		logger.info("新增用户"+user.toString());
+		return new ModelAndView("login");
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.guanhuan.spider.inter.impl;
 
+import com.guanhuan.common.utils.SpiderUtil;
 import com.guanhuan.spider.inter.Spider;
 import com.guanhuan.spider.manager.SpiderUser;
 import com.guanhuan.spider.service.HttpClientService;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Acfun推送爬取
@@ -64,6 +64,11 @@ public class AcfunSpider implements Spider{
                 // 构造一个form表单式的实体
                 UrlEncodedFormEntity formEntity = null;
                 CloseableHttpResponse response = null;
+                formEntity = new UrlEncodedFormEntity(parameters);
+                // 将请求实体设置到httpPost对象中
+                login.setEntity(formEntity);
+                // 伪装浏览器请求
+                SpiderUtil.config(login,"head//acfun");
             }
         }
         return true;

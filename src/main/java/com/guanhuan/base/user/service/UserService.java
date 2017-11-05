@@ -25,7 +25,7 @@ public class UserService {
 	
 	public void delete(User user) {
 		userRepository.delete(user);
-		userManager.delete(user);
+//		userManager.delete(user);
 	}
 	
 	public void update(User user) {
@@ -58,7 +58,4 @@ public class UserService {
 		return userRepository.findFirstById(userId);
 	}
 	
-	public List<User> getUserList(int begin, int amount){
-		return userManager.getUserList(begin, amount);
-	}
 }
