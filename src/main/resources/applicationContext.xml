@@ -65,7 +65,7 @@
 
 	<!--指定实现JPA的适配器-->
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-		<property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect" />
+		<property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
 	</bean>
 
 	<!-- 配置 JPA 的 EntityManagerFactory  -->
@@ -77,21 +77,25 @@
 		<!-- hibernate 配置 -->
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
+				<prop key="hibernate.physical_naming_strategy">org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl</prop>
 				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.formate_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto" >update</prop>
 			</props>
 		</property>
 	</bean>
-
-	<!-- Spring Data Jpa配置 -->
-	<jpa:repositories base-package="com"  transaction-manager-ref="transactionManager"
-					  entity-manager-factory-ref="entityManagerFactory" />
 
 	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager"
 		  class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
 	</bean>
+
+	<!-- Spring Data Jpa配置 -->
+	<jpa:repositories base-package="com"  transaction-manager-ref="transactionManager"
+					  query-lookup-strategy="create-if-not-found"
+					  entity-manager-factory-ref="entityManagerFactory"
+	/>
 
 	<!-- 配置支持基于注解的事务 -->
 	<tx:annotation-driven/>

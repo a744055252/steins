@@ -1,14 +1,14 @@
 package com.guanhuan.base.user.controller;
 
-import com.guanhuan.base.user.manager.User;
+import com.guanhuan.base.user.entity.User;
 import com.guanhuan.base.user.service.UserService;
 import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.IpUtil;
+import com.guanhuan.spider.inter.impl.AcfunSpider;
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/User")
 public class UserController {
-	
+
+	@Autowired
+	private AcfunSpider acfunSpider;
+
 	@Autowired
 	private UserService userService;
 
@@ -44,9 +48,9 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value="/User", method=RequestMethod.POST)
+	@RequestMapping(value="/user", method=RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView addUser(HttpSession session, @Validated @ModelAttribute User user, BindingResult bindingResult) throws Exception {
+	public ModelAndView addUser(@Validated @ModelAttribute User user, BindingResult bindingResult) throws Exception {
 		logger.debug("add running!");
 
 		if(bindingResult.hasErrors()){
@@ -71,6 +75,8 @@ public class UserController {
 		String currentTime = DateUtil.getCurrentYMDHMSDate();
 		user.setCreateTime(currentTime);
 		user.setUpdateTime(currentTime);
+		//用户密码加密
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		userService.add(user);
 		logger.info("新增用户"+user.toString());
 		return new ModelAndView("login");
@@ -116,9 +122,8 @@ public class UserController {
 	  * @Date: 2017/10/15/015 9:00
 	  **/
 	@RequestMapping("register")
-	public String register(){
-		logger.debug("register running!");
-		return "register";
+	public ModelAndView register(){
+		return new ModelAndView("register");
 	}
 
 
@@ -150,9 +155,11 @@ public class UserController {
 		}
 	}
 	
-	@RequestMapping("/print")
-	public void print(){
-		System.out.println("running!");
+	@RequestMapping("/Running")
+	@ResponseBody
+	public String spider() throws IOException {
+		acfunSpider.running();
+		return "ok";
 	}
 	
 }

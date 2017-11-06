@@ -47,7 +47,7 @@ public class AcfunUtil {
 //            conn.setRequestProperty();
 
             //模拟参数
-            String pars = "username=744055252%40qq.com&password=845650111";
+            String pars = "username=744055252%40qq.com&password=";
             pw = new PrintWriter(conn.getOutputStream());
             // 发送请求参数
             pw.print(pars);

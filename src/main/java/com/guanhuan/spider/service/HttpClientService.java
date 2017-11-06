@@ -7,6 +7,8 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,8 @@ public class HttpClientService implements DisposableBean {
 
     private int maxPerRoute = 200;
 
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientService.class);
+
     public  HttpClientService(){
         //连接池管理
         manager = new PoolingHttpClientConnectionManager();
@@ -39,7 +43,7 @@ public class HttpClientService implements DisposableBean {
         // 将每个路由基础的连接增加
         manager.setDefaultMaxPerRoute(maxPerRoute);
         // 将目标主机的最大连接数增加
-//        manager.setMaxPerRoute(new HttpRoute(httpHost), maxRoute);
+//        entity.setMaxPerRoute(new HttpRoute(httpHost), maxRoute);
 
         this.handler = handler;
 
@@ -47,6 +51,7 @@ public class HttpClientService implements DisposableBean {
                 .setConnectionManager(manager)
                 .setRetryHandler(handler)
                 .build();
+        logger.debug("hanlder:"+handler);
     }
 
     public void release() {

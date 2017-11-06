@@ -12,7 +12,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.guanhuan.spider.manager.SpiderUser;
+import com.guanhuan.spider.entity.SpiderUser;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;

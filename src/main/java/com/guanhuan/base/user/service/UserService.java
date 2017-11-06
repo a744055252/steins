@@ -1,19 +1,17 @@
 package com.guanhuan.base.user.service;
 
-import com.guanhuan.base.user.manager.User;
-import com.guanhuan.base.user.manager.UserManager;
-import com.guanhuan.base.user.manager.UserRepository;
+import com.guanhuan.base.user.entity.User;
+import com.guanhuan.base.user.entity.UserManager;
+import com.guanhuan.base.user.entity.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service("userService")
 public class UserService {
 
-	@Autowired
-	private UserManager userManager;
+//	@Autowired
+//	private UserManager userManager;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -46,6 +44,7 @@ public class UserService {
 //		}
 //		return user;
 		return userRepository.findFirstByAccount(account);
+//		return null;
 	}
 	
 	public User findById(long userId) {
@@ -55,7 +54,8 @@ public class UserService {
 //			user = userList.get(0);
 //		}
 //		return user;
-		return userRepository.findFirstById(userId);
+		return userRepository.findFirstByUserId(userId);
+//		return null;
 	}
 	
 }

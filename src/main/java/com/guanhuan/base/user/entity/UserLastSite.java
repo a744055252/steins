@@ -1,16 +1,15 @@
-package com.guanhuan.base.user.manager;
+package com.guanhuan.base.user.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Setter
 @Getter
 @ToString
-@Entity
+//@Entity
 public class UserLastSite {
 
     /** id */

@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="../User/add.do" method="POST">
-        用户名:<input type="text" placeholder="用户名" id="userName" name="userName"/>
+    <form action="../User/user" method="POST">
+        用户名:<input placeholder="用户名" id="userName" name="userName"/>
         账号:<input type="text" placeholder="账号" id="account" name="account"/>
         密码:<input type="password" placeholder="密码" id="password" name="password"/>
         性别:<input type="text" placeholder="性别" id="sex" name="sex"/>

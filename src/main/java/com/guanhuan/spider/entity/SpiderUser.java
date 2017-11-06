@@ -1,12 +1,14 @@
-package com.guanhuan.spider.manager;
+package com.guanhuan.spider.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 爬虫登录的用户
@@ -18,11 +20,12 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @ToString
-@Table(name="spiderUser")
-public class SpiderUser {
+@Table
+public class SpiderUser implements Serializable{
 
     /** id */
     @Id
+    @GeneratedValue
     private long id;
 
     /** 用户所属的平台 */
@@ -35,5 +38,5 @@ public class SpiderUser {
     private String password;
 
     /** 是否生效 */
-    private int state;
+    private int status;
 }

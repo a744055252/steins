@@ -1,15 +1,14 @@
-package com.guanhuan.base.user.manager;
+package com.guanhuan.base.user.entity;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * 用户类
@@ -18,11 +17,12 @@ import javax.validation.constraints.Size;
  * @email liguanhuan_a@163.com
  * @date 2017年8月16日
  */
-@Entity
 @Getter
 @Setter
 @ToString
-public class User {
+@Entity
+@Table
+public class User implements Serializable{
     /**
      * 用户id
      */
@@ -43,9 +43,9 @@ public class User {
     private String account;
 
     /**
-     * 用户密码  长度为8到15位
+     * 用户密码  长度最短为8
      */
-    @Size(min = 8, max = 15, message = "{user.userName.length.error}")
+    @Size(min = 8, message = "{user.userName.length.error}")
     private String password;
 
     /**

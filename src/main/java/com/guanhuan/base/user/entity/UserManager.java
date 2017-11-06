@@ -1,8 +1,7 @@
-package com.guanhuan.base.user.manager;
+package com.guanhuan.base.user.entity;
 
 import com.guanhuan.common.db.HibernateAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

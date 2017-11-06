@@ -1,7 +1,7 @@
 package com.guanhuan.spider.utils;
 
 import com.guanhuan.common.utils.SpiderUtil;
-import com.guanhuan.spider.manager.ACMsg;
+import com.guanhuan.spider.entity.ACMsg;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;

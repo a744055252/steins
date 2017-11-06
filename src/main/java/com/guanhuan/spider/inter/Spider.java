@@ -1,10 +1,6 @@
 package com.guanhuan.spider.inter;
 
-import com.guanhuan.spider.manager.SpiderUser;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: liguanhuan_a@163.com
@@ -17,7 +13,7 @@ public interface Spider {
 
     int STATE_EFFECTIVE = 1;
 
-    int STATE_INVALID = -1;
+    int STATE_INVALID = 0;
 
     /**
      * 当爬取的信息需要登录时，进行登录
@@ -29,7 +25,7 @@ public interface Spider {
      * 爬取数据并存入数据库
      * @Date: 16:51 2017/10/27
      */
-    boolean running();
+    boolean running() throws IOException;
 
     /**
      * 得到平台
