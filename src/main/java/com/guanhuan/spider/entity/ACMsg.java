@@ -35,11 +35,14 @@ public class ACMsg {
     /** 消息创建作者 */
     private String auther;
 
+    /** 作者的id */
+    private String autherId;
+
     /** 消息创建时间 */
-    private String createTime;
+    private long createTime;
 
     /** 消息爬取时间 */
-    private String spiderTime;
+    private long spiderTime;
 
     /** 消息标题 */
     private String title;
@@ -55,5 +58,8 @@ public class ACMsg {
 
     /** 消息详细的链接 */
     private String acUrl;
+
+    /** 描述 */
+    private String description;
 
 }

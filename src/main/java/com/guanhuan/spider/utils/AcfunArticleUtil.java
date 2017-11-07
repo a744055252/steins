@@ -1,5 +1,6 @@
 package com.guanhuan.spider.utils;
 
+import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.SpiderUtil;
 import com.guanhuan.spider.entity.ACMsg;
 import org.jsoup.nodes.Document;
@@ -105,7 +106,7 @@ public class AcfunArticleUtil {
                 acMsg.setClick(Long.parseLong(click));
             }
             acMsg.setAuther(auther);
-            acMsg.setCreateTime(createTime);
+            acMsg.setCreateTime(DateUtil.getLongDate(createTime));
             acMsg.setAcUrl(acUrl);
             acMsg.setType(type);
 
@@ -147,7 +148,7 @@ public class AcfunArticleUtil {
             acMsg.setAcUrl("www.acfun.cn"+acUrl);
             acMsg.setAuther(auther);
             acMsg.setClick(Long.parseLong(click));
-            acMsg.setCreateTime(createTime);
+            acMsg.setCreateTime(DateUtil.getLongDate(createTime));
             acMsg.setImageUrl(imgUrl);
             acMsg.setReview(Long.parseLong(review));
             acMsg.setTitle(title);

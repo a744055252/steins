@@ -2,10 +2,12 @@ package com.guanhuan.spider.inter.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.SpiderUtil;
 import com.guanhuan.spider.entity.ACMsg;
 import com.guanhuan.spider.inter.Spider;
 import com.guanhuan.spider.entity.SpiderUser;
+import com.guanhuan.spider.service.ACMsgService;
 import com.guanhuan.spider.service.HttpClientService;
 import com.guanhuan.spider.service.SpiderUserService;
 import org.apache.http.NameValuePair;
@@ -44,11 +46,15 @@ public class AcfunSpider implements Spider{
     @Autowired
     private SpiderUserService spiderUserService;
 
+    /** 消息服务 */
+    @Autowired
+    private ACMsgService acMsgService;
+
     /** 用于登录的账号 */
     private List<SpiderUser> loginUser;
 
     /** 爬取信息列表 */
-    private List<ACMsg> acMsgList;
+    private static List<ACMsg> acMsgList;
 
     /** 所属的平台 */
     private static final String TERRACE = Spider.TERRACE_ACFUN;
@@ -56,9 +62,14 @@ public class AcfunSpider implements Spider{
     /** 登录的post请求url */
     public static final String LOGINURL = "http://www.acfun.cn//login.aspx";
 
-    public static final String PUSHURL = "http://www.acfun.cn/member/publishContent.aspx?isGroup=0&groupId=-1&pageSize=10&pageNo=1";
+    /** 推送连接 在后面加页数实现翻页 */
+    public static final String PUSHURL = "http://www.acfun.cn/member/publishContent.aspx?isGroup=0&groupId=-1&pageSize=20&pageNo=";
 
     private static final Logger logger = LoggerFactory.getLogger(AcfunSpider.class);
+
+    static{
+        acMsgList = new ArrayList<ACMsg>();
+    }
 
     public boolean login() throws IOException {
         if(loginUser == null || loginUser.isEmpty()){
@@ -113,39 +124,88 @@ public class AcfunSpider implements Spider{
     public boolean running() throws IOException {
         logger.info("AcfunSpider running");
 
+        acMsgList.clear();
         //登录
         login();
         //获取数据
-        StringBuilder responseSB = new StringBuilder();
-        responseSB.delete(0,responseSB.length());
-        if(getPush(responseSB)){
-            acMsgList = stringToACMsg(responseSB.toString());
-        }
-        return true;
-    }
-
-    private boolean getPush(StringBuilder responseSB) throws IOException {
-        //推送页面
-        HttpGet push = new HttpGet(PUSHURL);
-        CloseableHttpResponse response;
-        try {
-            response = client.execute(push);
-        } catch (IOException e) {
-            logger.error("登录页面:"+PUSHURL+", 无法访问");
-            throw new RuntimeException("登录页面:"+PUSHURL+", 无法访问", e);
-        }
-        if(response.getStatusLine().getStatusCode() == 200){
-            responseSB.append(EntityUtils.toString(response.getEntity(),"UTF-8"));
+        if(getPush()){
+            acMsgService.addAll(acMsgList);
+            logger.info("AcfunSpider spider success!");
             return true;
         }else {
-            logger.error("无法获取推送消息，错误代码:"+response.getStatusLine().getStatusCode());
-            throw new RuntimeException("无法获取推送消息，错误代码:"+response.getStatusLine().getStatusCode());
+            logger.error("AcfunSpider spider fail");
+            return false;
         }
+    }
+
+    private boolean getPush() throws IOException {
+        boolean end = false;
+        //已爬取的最新数据，用于判断是否结束爬取
+        ACMsg topMsg = acMsgService.findTop();
+
+        //页数
+        int number = 0;
+        //爬取的列表
+        List<ACMsg> temp;
+
+        while(!end) {
+            //推送页面
+            ++number;
+            String currentPage = PUSHURL + number;
+            HttpGet push = new HttpGet(currentPage);
+            CloseableHttpResponse response;
+            try {
+                response = client.execute(push);
+            } catch (IOException e) {
+                logger.error("登录页面:" + currentPage + ", 无法访问");
+                throw new RuntimeException("登录页面:" + currentPage + ", 无法访问", e);
+            }
+            if (response.getStatusLine().getStatusCode() == 200) {
+                temp = stringToACMsg(EntityUtils.toString(response.getEntity(), "UTF-8"));
+            } else {
+                logger.error("无法获取推送消息，错误代码:" + response.getStatusLine().getStatusCode());
+                throw new RuntimeException("无法获取推送消息，错误代码:" + response.getStatusLine().getStatusCode());
+            }
+
+
+            for(int i = 0; i < temp.size(); i++){
+                //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
+                if(topMsg.getTerraceId().equals(temp.get(i).getTerraceId()) ||
+                        temp.get(i).getCreateTime() < topMsg.getCreateTime()){
+                    end = true;
+                    break;
+                }
+                acMsgList.add(temp.get(i));
+            }
+        }
+        return acMsgList != null || !acMsgList.isEmpty();
     }
 
     private List<ACMsg> stringToACMsg(String content){
-        JSONObject.parse(content);
-        return null;
+        JSONObject o = (JSONObject)JSONObject.parse(content);
+        JSONArray o1 = (JSONArray) o.get("contents");
+        JSONObject temp;
+        ACMsg acMsg;
+        List<ACMsg> acMsgs = new ArrayList<ACMsg>();
+        for(Object o2 : o1){
+            acMsg = new ACMsg();
+            temp = (JSONObject)o2;
+            acMsg.setAcUrl("http://www.acfun.cn"+temp.getString("url"));
+            acMsg.setAuther(temp.getString("username"));
+            acMsg.setClick(temp.getInteger("views"));
+            acMsg.setCreateTime(temp.getLong("releaseDate"));
+            acMsg.setReview(temp.getInteger("comments"));
+            acMsg.setTerraceId(temp.getString("vid"));
+            acMsg.setTitle(temp.getString("title"));
+            acMsg.setType(temp.getInteger("isArticle") == 1 ? "文章," : "视频,"+
+                    temp.getString("tags"));
+            acMsg.setSpiderTime(System.currentTimeMillis());
+            acMsg.setImageUrl(temp.getString("titleImg"));
+            acMsg.setDescription(temp.getString("description"));
+            acMsg.setAutherId(temp.getString("userId"));
+            acMsgs.add(acMsg);
+        }
+        return acMsgs;
     }
 
     public String getTerrace() {
@@ -161,13 +221,5 @@ public class AcfunSpider implements Spider{
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File("c://1.txt")));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while((line = br.readLine()) != null){
-            sb.append(line);
-        }
-        JSONObject o = (JSONObject)JSONObject.parse(sb.toString());
-        Object o1 = o.get("contents");
     }
 }

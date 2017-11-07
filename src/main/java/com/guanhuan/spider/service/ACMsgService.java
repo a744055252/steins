@@ -5,6 +5,7 @@ import com.guanhuan.spider.entity.ACMsgRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("ACMsgService")
@@ -24,6 +25,14 @@ public class ACMsgService {
 
     public void update(ACMsg acMsg) {
         acMsgRepository.save(acMsg);
+    }
+
+    public void addAll(Iterable<ACMsg> it){
+        acMsgRepository.saveAll(it);
+    }
+
+    public ACMsg findTop() {
+        return acMsgRepository.findTopByOrderByIdDesc();
     }
 
 }
