@@ -60,16 +60,12 @@ public class AcfunSpider implements Spider{
     private static final String TERRACE = Spider.TERRACE_ACFUN;
 
     /** 登录的post请求url */
-    public static final String LOGINURL = "http://www.acfun.cn//login.aspx";
+    private static final String LOGINURL = "http://www.acfun.cn//login.aspx";
 
     /** 推送连接 在后面加页数实现翻页 */
-    public static final String PUSHURL = "http://www.acfun.cn/member/publishContent.aspx?isGroup=0&groupId=-1&pageSize=20&pageNo=";
+    private static final String PUSHURL = "http://www.acfun.cn/member/publishContent.aspx?isGroup=0&groupId=-1&pageSize=20&pageNo=";
 
     private static final Logger logger = LoggerFactory.getLogger(AcfunSpider.class);
-
-    static{
-        acMsgList = new ArrayList<ACMsg>();
-    }
 
     public boolean login() throws IOException {
         if(loginUser == null || loginUser.isEmpty()){
@@ -143,6 +139,10 @@ public class AcfunSpider implements Spider{
         //已爬取的最新数据，用于判断是否结束爬取
         ACMsg topMsg = acMsgService.findTop();
 
+        if(acMsgList == null){
+            acMsgList = new ArrayList<ACMsg>();
+        }
+
         //页数
         int number = 0;
         //爬取的列表
@@ -167,16 +167,25 @@ public class AcfunSpider implements Spider{
                 throw new RuntimeException("无法获取推送消息，错误代码:" + response.getStatusLine().getStatusCode());
             }
 
-
-            for(int i = 0; i < temp.size(); i++){
-                //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
-                if(topMsg.getTerraceId().equals(temp.get(i).getTerraceId()) ||
-                        temp.get(i).getCreateTime() < topMsg.getCreateTime()){
+            for(ACMsg acMsg : temp){
+                if(topMsg.getTerraceId().equals(acMsg.getTerraceId()) ||
+                        acMsg.getCreateTime() < topMsg.getCreateTime()){
                     end = true;
                     break;
                 }
-                acMsgList.add(temp.get(i));
+                acMsgList.add(acMsg);
             }
+
+
+//            for(int i = 0; i < temp.size(); i++){
+//                //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
+//                if(topMsg.getTerraceId().equals(temp.get(i).getTerraceId()) ||
+//                        temp.get(i).getCreateTime() < topMsg.getCreateTime()){
+//                    end = true;
+//                    break;
+//                }
+//                acMsgList.add(temp.get(i));
+//            }
         }
         return acMsgList != null || !acMsgList.isEmpty();
     }
@@ -213,11 +222,11 @@ public class AcfunSpider implements Spider{
     }
 
     public boolean isEmpty() {
-        return false;
+        return acMsgList.isEmpty();
     }
 
     public int size() {
-        return 0;
+        return acMsgList.size();
     }
 
     public static void main(String[] args) throws IOException {
