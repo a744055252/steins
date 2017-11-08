@@ -31,7 +31,7 @@ public class JwtUtil {
 
     /**
      * 创建jwt
-     * @param subject 由user/id组成
+     * @param subject 由id组成
      * @param time
      * @param unit
      * @return
@@ -54,6 +54,23 @@ public class JwtUtil {
     }
 
     /**
+     * 创建jwt,不在token上设置超时时间，使用redis的有效时间进行代替
+     * @param subject 由id组成
+     * @return
+     * @throws Exception
+     */
+    public static String createJWT(String subject) throws Exception {
+        long nowMillis = System.currentTimeMillis();
+        Date now = new Date(nowMillis);
+        JwtBuilder builder = Jwts.builder()
+                .setIssuedAt(now)
+                .setSubject(subject)
+                .setIssuer(Constants.JWT_ISSUER)
+                .signWith(signatureAlgorithm, key);
+        return builder.compact();
+    }
+
+    /**
      * 解密jwt
      * @param jwt
      * @return
@@ -66,11 +83,11 @@ public class JwtUtil {
         return claims;
     }
 
-    /**
-     * 验证JWT
-     * @param jwtStr
-     * @return
-     */
+//    /**
+//     * 验证JWT
+//     * @param jwtStr
+//     * @return
+//     */
 //    public static CheckResult validateJWT(String jwtStr) {
 //        CheckResult checkResult = new CheckResult();
 //        Claims claims = null;
