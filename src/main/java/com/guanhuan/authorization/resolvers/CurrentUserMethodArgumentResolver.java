@@ -36,7 +36,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         //取出鉴权时存入的登录用户Id
-        Long currentUserId = (Long) webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST);
+        Long currentUserId = new Long((String)webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST));
         if (currentUserId != null) {
             //从数据库中查询并返回
             return userService.findById(currentUserId);

@@ -15,8 +15,8 @@ import java.sql.Timestamp;
  * @author ScienJus
  * @date 2015/7/10.
  */
-@Configuration
-@EnableSwagger
+//@Configuration
+//@EnableSwagger
 public class SwaggerConfig {
 
     private SpringSwaggerConfig springSwaggerConfig;

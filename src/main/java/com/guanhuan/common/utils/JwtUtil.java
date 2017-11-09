@@ -7,17 +7,27 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * jwt 工具类
+ * @Auther: guanhuan_li
+ * @Date: 17:55 2017/11/9
+ */
 public class JwtUtil {
 
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
     private static final SecretKey key = MacProvider.generateKey();
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
+
 
     /**
      * 由字符串生成加密key
@@ -60,6 +70,9 @@ public class JwtUtil {
      * @throws Exception
      */
     public static String createJWT(String subject) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append(key.getEncoded());
+        logger.info("create_key:"+sb.toString());
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         JwtBuilder builder = Jwts.builder()
@@ -77,6 +90,9 @@ public class JwtUtil {
      * @throws Exception
      */
     public static Claims parseJWT(String jwt) throws Exception{
+        StringBuilder sb = new StringBuilder();
+        sb.append(key.getEncoded());
+        logger.info("create_key:"+sb.toString());
         Claims claims = Jwts.parser()
            .setSigningKey(key)
            .parseClaimsJws(jwt).getBody();

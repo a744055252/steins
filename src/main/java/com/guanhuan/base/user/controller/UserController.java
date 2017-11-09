@@ -1,5 +1,7 @@
 package com.guanhuan.base.user.controller;
 
+import com.guanhuan.authorization.annotation.CurrentUser;
+import com.guanhuan.authorization.manager.impl.RedisTokenManager;
 import com.guanhuan.base.user.entity.User;
 import com.guanhuan.base.user.service.UserService;
 import com.guanhuan.common.utils.DateUtil;
@@ -9,15 +11,21 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,12 +47,18 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private RedisTemplate redisTemplate;
+
+	@Autowired
+	private RedisTokenManager redisTokenManager;
+
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	/**
 	 * 添加用户
 	 * 
-	 * @param session
+	 * @param bindingResult
 	 * @param user
 	 * @return
 	 */
@@ -88,11 +102,24 @@ public class UserController {
 	 * @Description:
 	 * @Date: 2017/10/14/014 20:39
 	 **/
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public ModelAndView login(HttpSession session, @RequestParam("account") String account, 
-			@RequestParam("password") String password) {
-		return null;
+	@RequestMapping(value="/token", method=RequestMethod.POST)
+	public ModelAndView login(@RequestHeader HttpHeaders headers, @RequestParam("account") String account,
+							  @RequestParam("password") String password) {
+		User user = userService.findByAccount(account);
+		if(user == null){
+			return new ModelAndView("404")
+					.addObject("message","账号不存在！");
+		}
+		if(!BCrypt.checkpw(password, user.getPassword())){
+			logger.info(account+" 输入错误的密码:" + password);
+			return new ModelAndView("404")
+					.addObject("message","密码错误！");
+		}
+		//成功登陆,创建token
+		String token = redisTokenManager.createToken(user);
 
+		return new ModelAndView("success")
+				.addObject("message",token);
 	}
 	
 	/**
@@ -102,7 +129,7 @@ public class UserController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value = "/User/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	@ResponseBody
 	public User getUser(HttpSession session, @PathVariable long userId) {
 		//当前用户
@@ -121,7 +148,7 @@ public class UserController {
 	  * @Description: 跳转注册页面
 	  * @Date: 2017/10/15/015 9:00
 	  **/
-	@RequestMapping("register")
+	@RequestMapping("/register")
 	public ModelAndView register(){
 		return new ModelAndView("register");
 	}
@@ -136,7 +163,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/isExist/{account}")
-	public boolean isExist(HttpSession session, HttpServletRequest request, @PathVariable String account) {
+	public boolean isExist(HttpSession session, @CurrentUser User currentUser, HttpServletRequest request, @PathVariable String account) {
 		String ip = null;
 		try {
 			ip = IpUtil.getIpAddr(request);
@@ -145,7 +172,7 @@ public class UserController {
 			session.setAttribute("errorMessage", "无法获取到ip地址");
 			return false;
 		}
-		logger.info("ip为：["+ip+"]的客户端查询了账号：["+account+"]是否存在");
+		logger.info(currentUser.getAccount()+"_"+currentUser.getUserName()+" 查询了账号：["+account+"]是否存在");
 		User user = userService.findByAccount(account);
 		if(null == user || user.getUserId() == 0) {
 			return false;
@@ -154,8 +181,15 @@ public class UserController {
 			return true;
 		}
 	}
-	
-	@RequestMapping("/Running")
+
+	@RequestMapping(value = "/redis", method = RequestMethod.POST)
+	@ResponseBody
+	public String addValue(@RequestParam("key") String key, @RequestParam("value") String value){
+		redisTemplate.boundValueOps(key).set(value);
+		return key + " : " + redisTemplate.boundValueOps(key).get();
+	}
+
+	@RequestMapping("/running")
 	@ResponseBody
 	public String spider() throws IOException {
 		acfunSpider.running();
