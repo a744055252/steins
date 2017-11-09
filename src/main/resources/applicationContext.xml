@@ -101,8 +101,6 @@
 	<!-- 配置支持基于注解的事务 -->
 	<tx:annotation-driven/>
 
-	<context:property-placeholder location="classpath:redis.properties" />
-
 	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<property name="maxIdle" value="1000" />
 		<property name="maxWaitMillis" value="1000" />

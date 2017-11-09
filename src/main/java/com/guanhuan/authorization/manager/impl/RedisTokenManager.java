@@ -40,7 +40,7 @@ public class RedisTokenManager implements TokenManager {
             throw new RuntimeException("Token创建异常:"+subject, e);
         }
         //存储到redis并设置过期时间
-        redis.boundValueOps(""+user.getUserId()).set(token, Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+        redis.boundValueOps(""+user.getUserId()).set(token, Constants.TOKEN_EXPIRES_TIME, Constants.TOKEN_EXPIRES_UNIT);
         return token;
     }
 
@@ -68,7 +68,7 @@ public class RedisTokenManager implements TokenManager {
         }
 
 //        如果验证成功，说明此用户进行了一次有效操作，延长token的过期时间
-        redis.boundValueOps(claims.getSubject()).expire(Constants.TOKEN_EXPIRES_HOUR, TimeUnit.HOURS);
+        redis.boundValueOps(claims.getSubject()).expire(Constants.TOKEN_EXPIRES_TIME, Constants.TOKEN_EXPIRES_UNIT);
         return CheckResult.ok(claims);
     }
 

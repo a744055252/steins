@@ -170,7 +170,6 @@ public class UserController {
 		} catch (Exception e) {
 			logger.info("无法获取到IP地址",e);
 			session.setAttribute("errorMessage", "无法获取到ip地址");
-			return false;
 		}
 		logger.info(currentUser.getAccount()+"_"+currentUser.getUserName()+" 查询了账号：["+account+"]是否存在");
 		User user = userService.findByAccount(account);

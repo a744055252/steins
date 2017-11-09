@@ -1,5 +1,7 @@
 package com.guanhuan.config;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 常量
  * @author ScienJus
@@ -13,10 +15,14 @@ public class Constants {
     public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
 
     /**
-     * token有效期（小时）
+     * token有效期
      */
-    public static final long TOKEN_EXPIRES_HOUR = 72;
+    public static final long TOKEN_EXPIRES_TIME = 72;
 
+    /**
+     * token有效期单位
+     */
+    public static final TimeUnit TOKEN_EXPIRES_UNIT = TimeUnit.HOURS;
     /**
      * 存放Authorization的header字段
      */

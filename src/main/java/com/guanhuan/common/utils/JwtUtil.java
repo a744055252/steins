@@ -24,7 +24,12 @@ public class JwtUtil {
 
     private static final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-    private static final SecretKey key = MacProvider.generateKey();
+    /**
+     * 这里用于加密的key是由MacProvider提供的，如果服务器重启，key就会改变，原先redis缓存的会无法成功校验
+     * 调试使用不变的key generalKey()
+     **/
+//    private static final SecretKey key = MacProvider.generateKey();
+    private static final SecretKey key = generalKey();
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
@@ -70,9 +75,6 @@ public class JwtUtil {
      * @throws Exception
      */
     public static String createJWT(String subject) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        sb.append(key.getEncoded());
-        logger.info("create_key:"+sb.toString());
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         JwtBuilder builder = Jwts.builder()
@@ -90,39 +92,12 @@ public class JwtUtil {
      * @throws Exception
      */
     public static Claims parseJWT(String jwt) throws Exception{
-        StringBuilder sb = new StringBuilder();
-        sb.append(key.getEncoded());
-        logger.info("create_key:"+sb.toString());
         Claims claims = Jwts.parser()
            .setSigningKey(key)
            .parseClaimsJws(jwt).getBody();
         return claims;
     }
 
-//    /**
-//     * 验证JWT
-//     * @param jwtStr
-//     * @return
-//     */
-//    public static CheckResult validateJWT(String jwtStr) {
-//        CheckResult checkResult = new CheckResult();
-//        Claims claims = null;
-//        try {
-//            claims = parseJWT(jwtStr);
-//            checkResult.setSuccess(true);
-//            checkResult.setClaims(claims);
-//        } catch (ExpiredJwtException e) {
-//            checkResult.setErrCode(Constant.JWT_ERRCODE_EXPIRE);
-//            checkResult.setSuccess(false);
-//        } catch (SignatureException e) {
-//            checkResult.setErrCode(Constant.JWT_ERRCODE_FAIL);
-//            checkResult.setSuccess(false);
-//        } catch (Exception e) {
-//            checkResult.setErrCode(Constant.JWT_ERRCODE_FAIL);
-//            checkResult.setSuccess(false);
-//        }
-//        return checkResult;
-//    }
 
     public static void main(String[] args){
         System.out.println(TimeUnit.SECONDS.toMillis(3));
