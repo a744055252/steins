@@ -1,7 +1,6 @@
 package com.guanhuan.spider.manager;
 
-import com.guanhuan.spider.inter.Spider;
-import com.guanhuan.spider.inter.impl.AcfunSpider;
+import com.guanhuan.spider.bean.AcfunSpider;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

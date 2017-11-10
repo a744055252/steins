@@ -1,13 +1,10 @@
 package com.guanhuan.spider.controller;
 
 import com.guanhuan.spider.entity.SpiderUser;
-import com.guanhuan.spider.entity.SpiderUserRepository;
-import com.guanhuan.spider.service.SpiderUserService;
-import org.hibernate.annotations.AttributeAccessor;
+import com.guanhuan.spider.inter.SpiderUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @create 2017-11-06 16:54
  **/
 @RestController
-@RequestMapping("SpiderUser")
+@RequestMapping("/SpiderUser")
 public class SpiderUserController {
 
     private static final Logger logger = LoggerFactory.getLogger(SpiderUserController.class);

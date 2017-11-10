@@ -2,7 +2,7 @@ package com.guanhuan.authorization.resolvers;
 
 import com.guanhuan.authorization.annotation.CurrentUser;
 import com.guanhuan.base.user.entity.User;
-import com.guanhuan.base.user.service.UserService;
+import com.guanhuan.base.user.inter.UserService;
 import com.guanhuan.config.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;

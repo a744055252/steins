@@ -42,7 +42,7 @@
 	</bean>
 
 	<!-- 爬虫浏览器 -->
-	<bean id="client" class="com.guanhuan.spider.service.HttpClientService">
+	<bean id="client" class="com.guanhuan.spider.service.HttpClientServiceImpl">
 		<!--出错控制类-->
 		<property name="handler">
 			<bean class="com.guanhuan.spider.bean.DefaultHander"/>

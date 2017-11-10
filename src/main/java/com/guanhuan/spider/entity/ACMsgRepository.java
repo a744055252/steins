@@ -2,6 +2,8 @@ package com.guanhuan.spider.entity;
 
 import com.guanhuan.common.db.HibernateAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,7 @@ import java.util.List;
  * @Description: ACMsgManager
  * @Date: 2017/10/15/015 21:23
  **/
-public interface ACMsgRepository extends CrudRepository<ACMsg, Long>{
+public interface ACMsgRepository extends JpaRepository<ACMsg, Long> {
     ACMsg findTopByOrderByIdDesc();
+    List<ACMsg> findByOrderByIdDesc(Pageable pageable);
 }

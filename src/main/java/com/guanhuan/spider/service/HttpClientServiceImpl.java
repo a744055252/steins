@@ -1,5 +1,6 @@
 package com.guanhuan.spider.service;
 
+import com.guanhuan.spider.inter.HttpClientService;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -20,8 +21,8 @@ import java.io.IOException;
  * @author liguanhuan_a@163.com
  * @create 2017-10-26 15:54
  **/
-@Service
-public class HttpClientService implements DisposableBean {
+@Service("HttpClientService")
+public class HttpClientServiceImpl implements DisposableBean,HttpClientService {
 
     private CloseableHttpClient client;
 
@@ -33,9 +34,9 @@ public class HttpClientService implements DisposableBean {
 
     private int maxPerRoute = 200;
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientService.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientServiceImpl.class);
 
-    public  HttpClientService(){
+    public  HttpClientServiceImpl(){
         //连接池管理
         manager = new PoolingHttpClientConnectionManager();
         // 将最大连接数增加

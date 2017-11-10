@@ -2,6 +2,7 @@ package com.guanhuan.spider.service;
 
 import com.guanhuan.spider.entity.SpiderUser;
 import com.guanhuan.spider.entity.SpiderUserRepository;
+import com.guanhuan.spider.inter.SpiderUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +12,8 @@ import java.util.List;
  * @author liguanhuan_a@163.com
  * @create 2017-11-06 11:43
  **/
-@Service
-public class SpiderUserService {
+@Service("SpiderUserService")
+public class SpiderUserServiceImpl implements SpiderUserService {
     @Autowired
     private SpiderUserRepository spiderUserRepository;
 

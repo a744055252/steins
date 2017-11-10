@@ -1,15 +1,14 @@
-package com.guanhuan.spider.inter.impl;
+package com.guanhuan.spider.bean;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.SpiderUtil;
 import com.guanhuan.spider.entity.ACMsg;
+import com.guanhuan.spider.inter.ACMsgService;
+import com.guanhuan.spider.inter.HttpClientService;
 import com.guanhuan.spider.inter.Spider;
 import com.guanhuan.spider.entity.SpiderUser;
-import com.guanhuan.spider.service.ACMsgService;
-import com.guanhuan.spider.service.HttpClientService;
-import com.guanhuan.spider.service.SpiderUserService;
+import com.guanhuan.spider.inter.SpiderUserService;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -20,15 +19,12 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Acfun推送爬取
