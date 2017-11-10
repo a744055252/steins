@@ -4,8 +4,10 @@ import com.guanhuan.authorization.annotation.CurrentUser;
 import com.guanhuan.authorization.manager.impl.RedisTokenManager;
 import com.guanhuan.base.user.entity.User;
 import com.guanhuan.base.user.service.UserService;
+import com.guanhuan.common.utils.CookieUtil;
 import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.IpUtil;
+import com.guanhuan.config.Constants;
 import com.guanhuan.spider.inter.impl.AcfunSpider;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -23,11 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户
@@ -98,12 +102,12 @@ public class UserController {
 
 	/**
 	 * @Author: liguanhuan_a@163.com
-	 * @param: [session, account, password]
+	 * @param: [response, account, password]
 	 * @Description:
 	 * @Date: 2017/10/14/014 20:39
 	 **/
 	@RequestMapping(value="/token", method=RequestMethod.POST)
-	public ModelAndView login(@RequestHeader HttpHeaders headers, @RequestParam("account") String account,
+	public ModelAndView login(HttpServletResponse response, @RequestParam("account") String account,
 							  @RequestParam("password") String password) {
 		User user = userService.findByAccount(account);
 		if(user == null){
@@ -117,6 +121,9 @@ public class UserController {
 		}
 		//成功登陆,创建token
 		String token = redisTokenManager.createToken(user);
+		//将token存入header和cookie
+		response.addHeader(Constants.AUTHORIZATION, token);
+		CookieUtil.addCookie(response, Constants.AUTHORIZATION, token, 3, TimeUnit.DAYS);
 
 		return new ModelAndView("success")
 				.addObject("message",token);

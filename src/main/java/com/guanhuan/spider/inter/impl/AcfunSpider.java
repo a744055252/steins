@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,8 +66,16 @@ public class AcfunSpider implements Spider{
     /** 推送连接 在后面加页数实现翻页 */
     private static final String PUSHURL = "http://www.acfun.cn/member/publishContent.aspx?isGroup=0&groupId=-1&pageSize=20&pageNo=";
 
+    /** 签到连接 后面加的是当前时间*/
+    private static final String SINGURL = "http://www.acfun.cn/webapi/record/actions/signin?channel=0&date=";
+
     private static final Logger logger = LoggerFactory.getLogger(AcfunSpider.class);
 
+    /**
+     * 登录
+     * @Date: 15:51 2017/11/10
+     * @param
+     */
     public boolean login() throws IOException {
         if(loginUser == null || loginUser.isEmpty()){
             //获取登录用到的账号
@@ -120,11 +129,18 @@ public class AcfunSpider implements Spider{
     public boolean running() throws IOException {
         logger.info("AcfunSpider running");
 
-        acMsgList.clear();
-        //登录
-        login();
+        if(acMsgList != null && !acMsgList.isEmpty()) {
+            acMsgList.clear();
+        }
+        //登录,使用签到来判断是否登录
+        if(!sign()){
+            login();
+        }
         //获取数据
         if(getPush()){
+            //将acMsgList顺序颠倒，这样保存进mysql的数据才是正确顺序。
+            //实现分批爬取时，需要从新设计。
+            Collections.reverse(acMsgList);
             acMsgService.addAll(acMsgList);
             logger.info("AcfunSpider spider success!");
             return true;
@@ -134,6 +150,11 @@ public class AcfunSpider implements Spider{
         }
     }
 
+    /**
+     * 获取推送
+     * @Date: 15:51 2017/11/10
+     * @param
+     */
     private boolean getPush() throws IOException {
         boolean end = false;
         //已爬取的最新数据，用于判断是否结束爬取
@@ -167,29 +188,53 @@ public class AcfunSpider implements Spider{
                 throw new RuntimeException("无法获取推送消息，错误代码:" + response.getStatusLine().getStatusCode());
             }
 
-            for(ACMsg acMsg : temp){
-                if(topMsg.getTerraceId().equals(acMsg.getTerraceId()) ||
-                        acMsg.getCreateTime() < topMsg.getCreateTime()){
+            //应该从列表尾到列表头，这才是正确顺序
+//            for(int i = temp.size()-1; i > 0 ; i--){
+            for(int i=0; i < temp.size(); i++){
+                //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
+                if(topMsg.getTerraceId().equals(temp.get(i).getTerraceId()) ||
+                        temp.get(i).getCreateTime() < topMsg.getCreateTime()){
                     end = true;
                     break;
                 }
-                acMsgList.add(acMsg);
+                acMsgList.add(temp.get(i));
             }
-
-
-//            for(int i = 0; i < temp.size(); i++){
-//                //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
-//                if(topMsg.getTerraceId().equals(temp.get(i).getTerraceId()) ||
-//                        temp.get(i).getCreateTime() < topMsg.getCreateTime()){
-//                    end = true;
-//                    break;
-//                }
-//                acMsgList.add(temp.get(i));
-//            }
         }
         return acMsgList != null || !acMsgList.isEmpty();
     }
 
+    /**
+     * 签到
+     * @Date: 15:50 2017/11/10
+     * @param
+     */
+    public boolean sign() throws IOException {
+        //签到请求
+        HttpGet signGet = new HttpGet(SINGURL+System.currentTimeMillis());
+        SpiderUtil.config(signGet,"head//acfun");
+        CloseableHttpResponse response;
+        try {
+            response = client.execute(signGet);
+        } catch (IOException e) {
+            logger.error("登录页面:" + signGet + ", 无法访问");
+            return false;
+        }
+        String temp = "";
+        if(response.getStatusLine().getStatusCode() == 200) {
+            temp = EntityUtils.toString(response.getEntity(), "UTF-8");
+        }
+
+        if(temp != null){
+            return temp.indexOf("200")>0;
+        }
+        return false;
+    }
+
+    /**
+     * 解析内容转换为ACMsg
+     * @Date: 15:52 2017/11/10
+     * @param content
+     */
     private List<ACMsg> stringToACMsg(String content){
         JSONObject o = (JSONObject)JSONObject.parse(content);
         JSONArray o1 = (JSONArray) o.get("contents");

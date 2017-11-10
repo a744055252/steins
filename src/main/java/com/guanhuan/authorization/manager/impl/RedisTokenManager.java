@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * 通过Redis存储和验证token的实现类
  * @see com.guanhuan.authorization.manager.TokenManager
- * @author ScienJus
- * @date 2015/7/31.
+ * @author guanhuan_li
+ * @date 2017-11-10 09:41:49.
  */
 @Component
 public class RedisTokenManager implements TokenManager {
@@ -52,6 +50,7 @@ public class RedisTokenManager implements TokenManager {
         try {
             claims = JwtUtil.parseJWT(token);
         } catch (Exception e) {
+            //这里的错误可以进行细化。
             return CheckResult.error(CheckStatus.FAIL_OTHER);
         }
         if(claims == null || "".equals(claims.getSubject())){

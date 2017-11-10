@@ -2,6 +2,7 @@ package com.guanhuan.authorization.interceptor;
 
 import com.guanhuan.authorization.entity.CheckResult;
 import com.guanhuan.authorization.manager.TokenManager;
+import com.guanhuan.common.utils.CookieUtil;
 import com.guanhuan.common.utils.IpUtil;
 import com.guanhuan.common.utils.JwtUtil;
 import com.guanhuan.config.Constants;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
@@ -43,9 +45,12 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         if(uri.equals("/User/user") && request.getMethod().compareToIgnoreCase("post") == 0){
             return true;
         }
-
-        //从header中得到token
+        logger.info("拦截:"+uri);
+        //从header或者cookie中得到token
         String authorization = request.getHeader(Constants.AUTHORIZATION);
+        if(authorization == null || "".equals(authorization)){
+            authorization = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION).getValue();
+        }
         //验证token
         CheckResult result = manager.checkToken(authorization);
         if(result.getCode() < 0){
@@ -55,11 +60,13 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
                 ip = IpUtil.getIpAddr(request);
             } catch (Exception e) {
                 logger.info("无法获取到IP地址",e);
+                return false;
             }
             logger.info("ip为：["+ip+"]的客户端未登陆");
             return false;
         }
         //成功解析
+        logger.info("用户id:"+result.getClaims().getSubject());
         request.setAttribute(Constants.CURRENT_USER_ID, result.getClaims().getSubject());
         return true;
     }

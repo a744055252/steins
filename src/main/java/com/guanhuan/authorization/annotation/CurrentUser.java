@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 在Controller的方法参数中使用此注解，该方法在映射时会注入当前登录的用户模型
  * @see com.guanhuan.authorization.resolvers.CurrentUserMethodArgumentResolver
- * @author ScienJus
- * @date 2015/7/31.
+ * @date 2017-11-10 09:42:11
  */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
