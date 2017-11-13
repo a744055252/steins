@@ -135,10 +135,10 @@ public class AcfunArticleUtil {
             fig = element.select("figcaption>b>a").first();
             temp = fig.attr("title").split("\r");
             title = temp[0];
-            if(!temp[2].contains("/") || !temp[2].contains("点击:") || !temp[2].contains("评论:")
-                    ||!temp[2].contains("UP:") || temp[2].contains("发布于")){
-                continue;
-            }
+//            if(!temp[2].contains("/") || !temp[2].contains("点击:") || !temp[2].contains("评论:")
+//                    ||!temp[2].contains("UP:") || !temp[2].contains("发布于")){
+//                continue;
+//            }
             auther = temp[1].substring(temp[1].indexOf("UP:")+3);
             createTime = temp[2].substring(temp[2].indexOf("发布于")+3, temp[2].indexOf("/")-1);
             click = temp[2].substring(temp[2].indexOf("点击:")+3, temp[2].lastIndexOf("/")-1);

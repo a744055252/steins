@@ -63,7 +63,8 @@ public class UserController {
 	 */
 	@RequestMapping(value="/user", method=RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView addUser(@Validated @ModelAttribute User user, BindingResult bindingResult) throws Exception {
+	public ModelAndView addUser(@Validated @ModelAttribute User user,
+								BindingResult bindingResult) throws Exception {
 		logger.debug("add running!");
 
 		if(bindingResult.hasErrors()){
