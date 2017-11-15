@@ -8,12 +8,16 @@ import com.guanhuan.common.utils.CookieUtil;
 import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.IpUtil;
 import com.guanhuan.config.Constants;
+import com.guanhuan.config.ResultStatus;
+import com.guanhuan.model.ResultModel;
 import com.guanhuan.spider.bean.AcfunSpider;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -103,17 +107,17 @@ public class UserController {
 	 * @Date: 2017/10/14/014 20:39
 	 **/
 	@RequestMapping(value="/token", method=RequestMethod.POST)
-	public ModelAndView login(HttpServletResponse response, @RequestParam("account") String account,
-							  @RequestParam("password") String password) {
+	public ResponseEntity<ResultModel> login(HttpServletResponse response, @RequestParam("account") String account,
+											 @RequestParam("password") String password) {
 		User user = userService.findByAccount(account);
 		if(user == null){
-			return new ModelAndView("404")
-					.addObject("message","账号不存在！");
+			return new ResponseEntity<ResultModel>
+					(ResultModel.error(ResultStatus.USER_NOT_FOUND), HttpStatus.NOT_FOUND);
 		}
 		if(!BCrypt.checkpw(password, user.getPassword())){
 			logger.info(account+" 输入错误的密码:" + password);
-			return new ModelAndView("404")
-					.addObject("message","密码错误！");
+			return new ResponseEntity<ResultModel>
+					(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
 		}
 		//成功登陆,创建token
 		String token = redisTokenManager.createToken(user);
@@ -121,8 +125,8 @@ public class UserController {
 		response.addHeader(Constants.AUTHORIZATION, token);
 		CookieUtil.addCookie(response, Constants.AUTHORIZATION, token, 3, TimeUnit.DAYS);
 
-		return new ModelAndView("success")
-				.addObject("message",token);
+		return new ResponseEntity<ResultModel>
+				(ResultModel.ok(token), HttpStatus.OK);
 	}
 	
 	/**
