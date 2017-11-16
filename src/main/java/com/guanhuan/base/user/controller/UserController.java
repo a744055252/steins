@@ -128,25 +128,22 @@ public class UserController {
 		return new ResponseEntity<ResultModel>
 				(ResultModel.ok(token), HttpStatus.OK);
 	}
-	
+
+
 	/**
 	 * 通过userId查找用户
 	 * 
-	 * @param session
-	 * @param userId
 	 * @return
 	 */
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	@ResponseBody
-	public User getUser(HttpSession session, @PathVariable long userId) {
-		//当前用户
-		User loginUser = (User)session.getAttribute("LoginUser");
-		if(loginUser == null) {
-			return null;
+	public ResponseEntity<ResultModel> getUser(@CurrentUser User user) {
+		if(user != null){
+			user.setPassword("");
+			return new ResponseEntity<ResultModel>(ResultModel.ok(user), HttpStatus.OK);
 		}
-		User user = userService.findById(userId);
-		logger.info("用户："+loginUser.toString()+"查询了用户："+user.toString());
-		return user;
+		return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USER_NOT_LOGIN),
+				 HttpStatus.GONE);
 	}
 
 	 /**

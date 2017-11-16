@@ -49,6 +49,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         //从header或者cookie中得到token
         String authorization = request.getHeader(Constants.AUTHORIZATION);
         if(authorization == null || "".equals(authorization)){
+            if(request.getCookies() == null || request.getCookies().length == 0){
+                return false;
+            }
             authorization = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION).getValue();
         }
         //验证token

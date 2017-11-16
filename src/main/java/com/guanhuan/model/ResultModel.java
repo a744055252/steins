@@ -8,7 +8,7 @@ import lombok.Getter;
  * @date 2017-11-8 17:45:58
  */
 @Getter
-public class ResultModel {
+public class ResultModel<T> {
 
     /**
      * 返回码
@@ -23,16 +23,16 @@ public class ResultModel {
     /**
      * 返回内容
      */
-    private Object content;
+    private T content;
 
 
     public ResultModel(int code, String message) {
         this.code = code;
         this.message = message;
-        this.content = "";
+        this.content = null;
     }
 
-    public ResultModel(int code, String message, Object content) {
+    public ResultModel(int code, String message, T content) {
         this.code = code;
         this.message = message;
         this.content = content;
@@ -41,16 +41,16 @@ public class ResultModel {
     public ResultModel(ResultStatus status) {
         this.code = status.getCode();
         this.message = status.getMessage();
-        this.content = "";
+        this.content = null;
     }
 
-    public ResultModel(ResultStatus status, Object content) {
+    public ResultModel(ResultStatus status, T content) {
         this.code = status.getCode();
         this.message = status.getMessage();
         this.content = content;
     }
 
-    public static ResultModel ok(Object content) {
+    public static <T> ResultModel ok(T content) {
         return new ResultModel(ResultStatus.SUCCESS, content);
     }
 
