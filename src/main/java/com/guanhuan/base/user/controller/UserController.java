@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -112,12 +113,12 @@ public class UserController {
 		User user = userService.findByAccount(account);
 		if(user == null){
 			return new ResponseEntity<ResultModel>
-					(ResultModel.error(ResultStatus.USER_NOT_FOUND), HttpStatus.NOT_FOUND);
+					(ResultModel.error(ResultStatus.USER_NOT_FOUND), HttpStatus.UNAUTHORIZED);
 		}
 		if(!BCrypt.checkpw(password, user.getPassword())){
 			logger.info(account+" 输入错误的密码:" + password);
 			return new ResponseEntity<ResultModel>
-					(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
+					(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.UNAUTHORIZED);
 		}
 		//成功登陆,创建token
 		String token = redisTokenManager.createToken(user);
