@@ -17,11 +17,17 @@ public enum CheckStatus {
     /** 校验失败，签名错误 */
     FAIL_SIGNATURE(-2, "签名错误"),
 
-    /** 校验失败，无法获取claims */
-    FAIL_CLAIMS(-3, "无法获取claims"),
+    /** 校验失败，无法转换为claims */
+    FAIL_CLAIMS(-3, "无法转换为claims"),
+
+    /** 校验失败，该字符串不是一个有效的jwt字符串 */
+    FAIL_MALFORMED(-4, "该字符串不是一个有效的jwt字符串"),
+
+    /** 校验失败，该字符串为空 */
+    FAIL_ISEMPTY(-5,"该字符串为空"),
 
     /** 校验失败，其他错误 */
-    FAIL_OTHER(-4, "其他错误");
+    FAIL_OTHER(-6, "其他错误");
 
     /** 返回码 */
     private int code;

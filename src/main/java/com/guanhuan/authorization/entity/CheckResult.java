@@ -2,10 +2,7 @@ package com.guanhuan.authorization.entity;
 
 import com.guanhuan.config.CheckStatus;
 import io.jsonwebtoken.Claims;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 /**
  * jwt的检查结果
@@ -16,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor()
 @AllArgsConstructor
+@ToString
 public class CheckResult {
 
     /** 检查结果码 */

@@ -54,6 +54,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             }
             authorization = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION).getValue();
         }
+
         //验证token
         CheckResult result = manager.checkToken(authorization);
         if(result.getCode() < 0){

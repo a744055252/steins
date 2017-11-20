@@ -1,10 +1,9 @@
 package com.guanhuan.common.utils;
 
+import com.guanhuan.authorization.entity.CheckResult;
+import com.guanhuan.config.CheckStatus;
 import com.guanhuan.config.Constants;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class JwtUtil {
      * @param subject 由id组成
      * @param time
      * @param unit
-     * @return
+     * @return token
      * @throws Exception
      */
     public static String createJWT(String subject, long time, TimeUnit unit) throws Exception {
@@ -71,10 +70,10 @@ public class JwtUtil {
     /**
      * 创建jwt,不在token上设置超时时间，使用redis的有效时间进行代替
      * @param subject 由id组成
-     * @return
+     * @return token
      * @throws Exception
      */
-    public static String createJWT(String subject) throws Exception {
+    public static String createJWT(String subject) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         JwtBuilder builder = Jwts.builder()
@@ -88,20 +87,44 @@ public class JwtUtil {
     /**
      * 解密jwt
      * @param jwt
-     * @return
-     * @throws Exception
+     * @return CheckResult
      */
-    public static Claims parseJWT(String jwt) throws Exception{
-        Claims claims = Jwts.parser()
-           .setSigningKey(key)
-           .parseClaimsJws(jwt).getBody();
-        return claims;
+    public static CheckResult parseJWT(String jwt) {
+        Claims claims = null;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(key)
+                    .parseClaimsJws(jwt).getBody();
+        }catch (UnsupportedJwtException e) {
+            //无法将jwt转换为claims
+            return CheckResult.error(CheckStatus.FAIL_CLAIMS);
+        } catch (MalformedJwtException e) {
+            //该字符串不是一个有效的jwt字符串
+            return CheckResult.error(CheckStatus.FAIL_MALFORMED);
+        } catch (IllegalArgumentException e) {
+            //该字符串为空
+            return CheckResult.error(CheckStatus.FAIL_ISEMPTY);
+        } catch (SignatureException e) {
+            //签名错误
+            return CheckResult.error(CheckStatus.FAIL_SIGNATURE);
+        } catch (ExpiredJwtException e) {
+            //jwt已经过期
+            return CheckResult.error(CheckStatus.FAIL_EXPIRED);
+        }
+
+        return CheckResult.ok(claims);
     }
 
 
-    public static void main(String[] args){
-        System.out.println(TimeUnit.SECONDS.toMillis(3));
+    public static void main(String[] args) throws Exception {
+        CheckResult result = JwtUtil.parseJWT("eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MTExNjkxMjAsInN1YiI6IjYiLCJpc3MiOiJTdGVpbnMgR2F0ZSJ9.9GfkMazT-UjWZtCKYC-DfUCeL3yE9h4eRJwBMMP_-DQ");
+        System.out.println(DateUtil.getYMDHMSDate(result.getClaims().getIssuedAt().getTime()));
 
+        String token = JwtUtil.createJWT("6");
+        System.out.println("1:"+token);
+        System.out.println("2:eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MTExNjkxMjAsInN1YiI6IjYiLCJpc3MiOiJTdGVpbnMgR2F0ZSJ9.9GfkMazT-UjWZtCKYC-DfUCeL3yE9h4eRJwBMMP_-DQ");
+        CheckResult tokenResult = JwtUtil.parseJWT(token);
+        System.out.println(DateUtil.getYMDHMSDate(tokenResult.getClaims().getIssuedAt().getTime()));
 
     }
 }

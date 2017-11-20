@@ -15,9 +15,14 @@ public class Constants {
     public static final String CURRENT_USER_ID = "CURRENT_USER_ID";
 
     /**
-     * token有效期
+     * token的有效期
      */
-    public static final long TOKEN_EXPIRES_TIME = 72;
+    public static final long TOKEN_EXPIRES_TIME = 360;
+
+    /**
+     * 临时token的有效期
+     */
+    public static final long TOKEN_EXPIRES_TIEM_TEMP = 3;
 
     /**
      * token有效期单位
