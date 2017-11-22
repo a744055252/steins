@@ -11,8 +11,8 @@ public enum CheckStatus {
     /** 校验成功 */
     SUCCESS(1,"成功"),
 
-    /** 校验失败，超时 */
-    FAIL_EXPIRED(-1, "超时"),
+    /** 校验失败，token过期 */
+    FAIL_EXPIRED(-1, "token过期"),
 
     /** 校验失败，签名错误 */
     FAIL_SIGNATURE(-2, "签名错误"),

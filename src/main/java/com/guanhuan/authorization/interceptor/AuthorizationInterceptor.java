@@ -5,6 +5,7 @@ import com.guanhuan.authorization.manager.TokenManager;
 import com.guanhuan.common.utils.CookieUtil;
 import com.guanhuan.common.utils.IpUtil;
 import com.guanhuan.common.utils.JwtUtil;
+import com.guanhuan.config.CheckStatus;
 import com.guanhuan.config.Constants;
 import org.apache.http.HttpResponse;
 import org.slf4j.Logger;
@@ -55,9 +56,11 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             authorization = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION).getValue();
         }
 
-        //验证token
+        //验证token,这里可以减少一层结果的返回,直接使用HttpServletResponse的状态码
         CheckResult result = manager.checkToken(authorization);
         if(result.getCode() < 0){
+            //设置状态码
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             String ip = null;
             try {
