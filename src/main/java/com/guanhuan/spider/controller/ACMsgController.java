@@ -1,5 +1,6 @@
 package com.guanhuan.spider.controller;
 
+import com.guanhuan.model.ResultModel;
 import com.guanhuan.spider.entity.ACMsg;
 import com.guanhuan.spider.inter.ACMsgService;
 import com.guanhuan.spider.utils.AcfunArticleUtil;
@@ -31,12 +32,12 @@ public class ACMsgController {
      * 获取已经登录的acfun用户的推送信息
      * @Date: 11:17 2017/11/13
      * @param page 页数，0为第一页
-     * @param size 一页的大小，包含多少条推送数据
+     * @param size 一页的大小，包含多少条推送数据
      */
     @RequestMapping(value = "/acmsg/{page}/{size}", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getACMsg(@PathVariable int page, @PathVariable int size){
-        return service.findAllDesc(page,size);
+    public ResultModel<List<ACMsg>> getACMsg(@PathVariable int page, @PathVariable int size){
+        return ResultModel.ok(service.findAllDesc(page,size));
     }
 
     /**
@@ -46,9 +47,11 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/comp", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getComp() throws Exception {
-        AcfunArticleUtil.refresh();
-        return AcfunArticleUtil.getCompMsgList();
+    public ResultModel<List<ACMsg>> getComp(boolean refresh) throws Exception {
+        if(refresh) {
+            AcfunArticleUtil.refresh();
+        }
+        return ResultModel.ok(AcfunArticleUtil.getCompMsgList());
     }
 
     /**
@@ -58,9 +61,11 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/work", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getWork() throws Exception {
-        AcfunArticleUtil.refresh();
-        return AcfunArticleUtil.getWorkMsgList();
+    public ResultModel<List<ACMsg>> getWork(boolean refresh) throws Exception {
+        if(refresh) {
+            AcfunArticleUtil.refresh();
+        }
+        return ResultModel.ok(AcfunArticleUtil.getWorkMsgList());
     }
 
     /**
@@ -70,9 +75,11 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/anime", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getAnime() throws Exception {
-        AcfunArticleUtil.refresh();
-        return AcfunArticleUtil.getAnimeMsgList();
+    public ResultModel<List<ACMsg>> getAnime(boolean refresh) throws Exception {
+        if(refresh) {
+            AcfunArticleUtil.refresh();
+        }
+        return ResultModel.ok(AcfunArticleUtil.getAnimeMsgList());
     }
 
     /**
@@ -82,9 +89,11 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/cartoon", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getCartoon() throws Exception {
-        AcfunArticleUtil.refresh();
-        return AcfunArticleUtil.getCartoonMsgList();
+    public ResultModel<List<ACMsg>> getCartoon(boolean refresh) throws Exception {
+        if(refresh) {
+            AcfunArticleUtil.refresh();
+        }
+        return ResultModel.ok(AcfunArticleUtil.getCartoonMsgList());
     }
 
     /**
@@ -94,9 +103,11 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/game", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getGame() throws Exception {
-        AcfunArticleUtil.refresh();
-        return AcfunArticleUtil.getGameMsgList();
+    public ResultModel<List<ACMsg>> getGame(boolean refresh) throws Exception {
+        if(refresh) {
+            AcfunArticleUtil.refresh();
+        }
+        return ResultModel.ok(AcfunArticleUtil.getGameMsgList());
     }
 
     /**
@@ -106,14 +117,16 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/banana", method = RequestMethod.GET)
     @ResponseBody
-    public List<ACMsg> getBanana() throws Exception {
-        AcfunArticleUtil.refresh();
-        return AcfunArticleUtil.getBananaMsgList();
+    public ResultModel<List<ACMsg>> getBanana(boolean refresh) throws Exception {
+        if(refresh) {
+            AcfunArticleUtil.refresh();
+        }
+        return ResultModel.ok(AcfunArticleUtil.getBananaMsgList());
     }
 
     @RequestMapping(value = "/allAritcle", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, List<ACMsg>> getAllAritcle() throws Exception {
+    public ResultModel<Map<String, List<ACMsg>>> getAllAritcle() throws Exception {
         AcfunArticleUtil.refresh();
         Map<String, List<ACMsg>> map = new HashMap<String, List<ACMsg>>();
         map.put("comp", AcfunArticleUtil.getCompMsgList());
@@ -122,8 +135,8 @@ public class ACMsgController {
         map.put("cartoon", AcfunArticleUtil.getCartoonMsgList());
         map.put("game", AcfunArticleUtil.getGameMsgList());
         map.put("banana", AcfunArticleUtil.getBananaMsgList());
-
-        return map;
+        ResultModel<Map<String, List<ACMsg>>> result = ResultModel.ok(map);
+        return result;
     }
 
 }

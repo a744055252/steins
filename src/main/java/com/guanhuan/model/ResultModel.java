@@ -51,7 +51,7 @@ public class ResultModel<T> {
     }
 
     public static <T> ResultModel ok(T content) {
-        return new ResultModel(ResultStatus.SUCCESS, content);
+        return new ResultModel<T>(ResultStatus.SUCCESS, content);
     }
 
     public static ResultModel ok() {

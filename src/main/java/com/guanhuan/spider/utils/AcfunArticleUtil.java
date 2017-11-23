@@ -1,6 +1,7 @@
 package com.guanhuan.spider.utils;
 
 import com.guanhuan.common.utils.DateUtil;
+import com.guanhuan.common.utils.NumberUtil;
 import com.guanhuan.common.utils.SpiderUtil;
 import com.guanhuan.spider.entity.ACMsg;
 import org.jsoup.nodes.Document;
@@ -102,8 +103,9 @@ public class AcfunArticleUtil {
             if(!review.equals("")){
                 acMsg.setReview(Long.parseLong(review));
             }
+            //会有11.7万这样的数据
             if(!click.equals("")) {
-                acMsg.setClick(Long.parseLong(click));
+                acMsg.setClick((long)NumberUtil.toNumber(click));
             }
             acMsg.setAuther(auther);
             acMsg.setCreateTime(DateUtil.getLongDate(createTime));

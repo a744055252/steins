@@ -56,13 +56,14 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             authorization = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION).getValue();
         }
 
+        String ip = null;
+
         //验证token,这里可以减少一层结果的返回,直接使用HttpServletResponse的状态码
         CheckResult result = manager.checkToken(authorization);
         if(result.getCode() < 0){
             //设置状态码
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            String ip = null;
             try {
                 ip = IpUtil.getIpAddr(request);
             } catch (Exception e) {
@@ -73,7 +74,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         //成功解析
-        logger.info("用户id:"+result.getClaims().getSubject());
+        logger.info("用户"+ip+"的id:"+result.getClaims().getSubject());
         request.setAttribute(Constants.CURRENT_USER_ID, result.getClaims().getSubject());
         return true;
     }
