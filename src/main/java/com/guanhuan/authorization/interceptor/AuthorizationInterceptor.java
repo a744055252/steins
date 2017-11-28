@@ -3,23 +3,24 @@ package com.guanhuan.authorization.interceptor;
 import com.guanhuan.authorization.entity.CheckResult;
 import com.guanhuan.authorization.manager.TokenManager;
 import com.guanhuan.common.utils.CookieUtil;
+import com.guanhuan.common.utils.HttpUtil;
 import com.guanhuan.common.utils.IpUtil;
-import com.guanhuan.common.utils.JwtUtil;
 import com.guanhuan.config.CheckStatus;
 import com.guanhuan.config.Constants;
-import org.apache.http.HttpResponse;
+import com.guanhuan.config.ResultStatus;
+import com.guanhuan.model.ResultModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
+
+import static com.guanhuan.config.ResultStatus.USER_NOT_AUTH;
 
 /**
  * 自定义拦截器，判断此次请求是否有权限
@@ -50,20 +51,37 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         //从header或者cookie中得到token
         String authorization = request.getHeader(Constants.AUTHORIZATION);
         if(authorization == null || "".equals(authorization)){
-            if(request.getCookies() == null || request.getCookies().length == 0){
+            Cookie auth = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION);
+            if(request.getCookies() == null || request.getCookies().length == 0 || auth == null){
+                HttpUtil.returnErrorMessage(response,
+                        ResultModel.error(ResultStatus.USER_NOT_AUTH));
                 return false;
             }
-            authorization = CookieUtil.getCookieByName(request, Constants.AUTHORIZATION).getValue();
+            authorization = auth.getValue();
         }
 
         String ip = null;
 
-        //验证token,这里可以减少一层结果的返回,直接使用HttpServletResponse的状态码
         CheckResult result = manager.checkToken(authorization);
         if(result.getCode() < 0){
             //设置状态码
 
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            ResultModel resultModel;
+            switch (CheckStatus.getByValue(result.getCode())){
+                case FAIL_EXPIRED :
+                    resultModel = new ResultModel(ResultStatus.USER_EXPIRES_AUTH);
+                    break;
+                case FAIL_SIGNATURE:
+                case FAIL_MALFORMED:
+                case FAIL_CLAIMS:
+                case FAIL_ISEMPTY:
+                    resultModel = new ResultModel(ResultStatus.USER_TOKEN_ERROR);
+                    break;
+                default:
+                    resultModel = new ResultModel(ResultStatus.USER_OTHER_ERROR);
+                    break;
+            }
+            HttpUtil.returnErrorMessage(response, resultModel);
             try {
                 ip = IpUtil.getIpAddr(request);
             } catch (Exception e) {

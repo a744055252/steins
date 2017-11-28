@@ -57,4 +57,14 @@ public enum CheckStatus {
         this.message = message;
     }
 
+
+    // 根据code返回枚举类型,主要在switch中使用
+    public static CheckStatus getByValue(int code) {
+        for (CheckStatus checkStatus : values()) {
+            if (checkStatus.getCode() == code) {
+                return checkStatus;
+            }
+        }
+        return null;
+    }
 }

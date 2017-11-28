@@ -199,5 +199,10 @@ public class UserController {
 		acfunSpider.running();
 		return "ok";
 	}
-	
+
+	@RequestMapping("/exception")
+	public void exception(){
+		throw new RuntimeException("运行时异常测试");
+	}
+
 }

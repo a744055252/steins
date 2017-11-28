@@ -32,6 +32,7 @@
 			</props>
 		</property>
 	</bean>
+	<bean id="exceptionHandler" class="com.guanhuan.authorization.resolvers.DefaultExceptionHandler" />
 
 	<bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 		<property name="supportedMediaTypes">
