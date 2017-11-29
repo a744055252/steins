@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 异常增强，以JSON的形式返回给客服端
  * 不使用这种方式
- *
+ * 使用于自定义的异常处理
  */
 //@ControllerAdvice
 public class RestExceptionHandler{

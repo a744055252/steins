@@ -20,8 +20,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.guanhuan.config.ResultStatus.USER_NOT_AUTH;
-
 /**
  * 自定义拦截器，判断此次请求是否有权限
  * @see com.guanhuan.authorization.annotation.Authorization

@@ -6,7 +6,7 @@ package com.guanhuan.config;
  * @date 2015/7/15.
  */
 public enum ResultStatus {
-    SUCCESS(100, "成功"),
+    SUCCESS(200, "成功"),
 
     //系统错误
     SYS_ERROR(-1001, "系统错误"),
