@@ -1,11 +1,9 @@
 package com.guanhuan.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.guanhuan.config.ResultStatus;
 import com.guanhuan.model.ResultModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import sun.misc.CharacterEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

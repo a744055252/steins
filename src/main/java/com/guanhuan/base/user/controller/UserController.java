@@ -112,13 +112,10 @@ public class UserController {
 											 @RequestParam("password") String password) {
 		User user = userService.findByAccount(account);
 		if(user == null){
-			return new ResponseEntity<ResultModel>
-					(ResultModel.error(ResultStatus.USER_NOT_FOUND), HttpStatus.UNAUTHORIZED);
+			return ResponseEntity.ok(ResultModel.error(ResultStatus.USER_NOT_FOUND));
 		}
 		if(!BCrypt.checkpw(password, user.getPassword())){
-			logger.info(account+" 输入错误的密码:" + password);
-			return new ResponseEntity<ResultModel>
-					(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.UNAUTHORIZED);
+			return ResponseEntity.ok(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR));
 		}
 		//成功登陆,创建token
 		String token = redisTokenManager.createToken(user);
@@ -126,8 +123,7 @@ public class UserController {
 		response.addHeader(Constants.AUTHORIZATION, token);
 		CookieUtil.addCookie(response, Constants.AUTHORIZATION, token, 3, TimeUnit.DAYS);
 
-		return new ResponseEntity<ResultModel>
-				(ResultModel.ok(token), HttpStatus.OK);
+		return ResponseEntity.ok(ResultModel.ok(token));
 	}
 
 
@@ -141,10 +137,9 @@ public class UserController {
 	public ResponseEntity<ResultModel> getUser(@CurrentUser User user) {
 		if(user != null){
 			user.setPassword("");
-			return new ResponseEntity<ResultModel>(ResultModel.ok(user), HttpStatus.OK);
+			return ResponseEntity.ok(ResultModel.ok(user));
 		}
-		return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USER_NOT_LOGIN),
-				 HttpStatus.GONE);
+		return ResponseEntity.ok(ResultModel.error(ResultStatus.USER_NOT_LOGIN));
 	}
 
 	 /**

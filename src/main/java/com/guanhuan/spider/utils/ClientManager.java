@@ -71,7 +71,7 @@ public class ClientManager {
      * 获取一个可以定时关闭的浏览器对象
      * @Date: 17:39 2017/10/24
      * @param time 运行时长
-     * @param unit 运行时长的单位
+     * @param unit 运行时长的单位
      */
     public static CloseableHttpClient getClient(long time, TimeUnit unit){
         return getClient(unit.toMillis(time));
