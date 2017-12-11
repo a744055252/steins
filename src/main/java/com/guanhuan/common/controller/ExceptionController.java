@@ -19,14 +19,14 @@ public class ExceptionController {
 
     @RequestMapping("404")
     @ResponseBody
-    public ResponseEntity<ResultModel> error_404(){
-        return ResponseEntity.ok(ResultModel.error(ResultStatus.SYS_ERROR_404));
+    public ResultModel<?> error_404(){
+        return ResultModel.error(ResultStatus.SYS_ERROR_404);
     }
 
     @RequestMapping("500")
     @ResponseBody
-    public ResponseEntity<ResultModel> error_500(){
-        return ResponseEntity.ok(ResultModel.error(ResultStatus.SYS_ERROR_500));
+    public ResultModel<?> error_500(){
+        return ResultModel.error(ResultStatus.SYS_ERROR_500);
     }
 
 }

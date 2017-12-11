@@ -15,8 +15,12 @@ import java.util.List;
 @Service("ACMsgService")
 public class ACMsgServiceImpl implements ACMsgService{
 
+    private final ACMsgRepository acMsgRepository;
+
     @Autowired
-    private ACMsgRepository acMsgRepository;
+    public ACMsgServiceImpl(ACMsgRepository acMsgRepository) {
+        this.acMsgRepository = acMsgRepository;
+    }
 
     public boolean add(ACMsg acMsg) {
         acMsgRepository.save(acMsg);

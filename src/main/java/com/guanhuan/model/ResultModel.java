@@ -53,7 +53,7 @@ public class ResultModel<T> implements Serializable {
         this.content = content;
     }
 
-    public static <T> ResultModel ok(T content) {
+    public static <T> ResultModel<T> ok(T content) {
         return new ResultModel<T>(ResultStatus.SUCCESS, content);
     }
 
@@ -61,7 +61,7 @@ public class ResultModel<T> implements Serializable {
         return new ResultModel(ResultStatus.SUCCESS);
     }
 
-    public static ResultModel error(ResultStatus error) {
+    public static ResultModel<?> error(ResultStatus error) {
         return new ResultModel(error);
     }
 

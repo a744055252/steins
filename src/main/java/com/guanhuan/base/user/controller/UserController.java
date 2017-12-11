@@ -108,14 +108,14 @@ public class UserController {
 	 * @Date: 2017/10/14/014 20:39
 	 **/
 	@RequestMapping(value="/token", method=RequestMethod.POST)
-	public ResponseEntity<ResultModel> login(HttpServletResponse response, @RequestParam("account") String account,
+	public ResultModel<?> login(HttpServletResponse response, @RequestParam("account") String account,
 											 @RequestParam("password") String password) {
 		User user = userService.findByAccount(account);
 		if(user == null){
-			return ResponseEntity.ok(ResultModel.error(ResultStatus.USER_NOT_FOUND));
+			return ResultModel.error(ResultStatus.USER_NOT_FOUND);
 		}
 		if(!BCrypt.checkpw(password, user.getPassword())){
-			return ResponseEntity.ok(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR));
+			return ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR);
 		}
 		//成功登陆,创建token
 		String token = redisTokenManager.createToken(user);
@@ -123,23 +123,22 @@ public class UserController {
 		response.addHeader(Constants.AUTHORIZATION, token);
 		CookieUtil.addCookie(response, Constants.AUTHORIZATION, token, 3, TimeUnit.DAYS);
 
-		return ResponseEntity.ok(ResultModel.ok(token));
+		return ResultModel.ok(token);
 	}
 
 
 	/**
 	 * 通过userId查找用户
 	 * 
-	 * @return
 	 */
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<ResultModel> getUser(@CurrentUser User user) {
+	public ResultModel<?> getUser(@CurrentUser User user) {
 		if(user != null){
 			user.setPassword("");
-			return ResponseEntity.ok(ResultModel.ok(user));
+			return ResultModel.ok(user);
 		}
-		return ResponseEntity.ok(ResultModel.error(ResultStatus.USER_NOT_LOGIN));
+		return ResultModel.error(ResultStatus.USER_NOT_LOGIN);
 	}
 
 	 /**

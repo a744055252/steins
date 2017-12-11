@@ -115,9 +115,9 @@ public class ACMsgController {
      * @Date: 11:18 2017/11/13
      * @param
      */
-    @RequestMapping(value = "/banana", method = RequestMethod.GET)
+    @RequestMapping(value = "/banana/{refresh}", method = RequestMethod.GET)
     @ResponseBody
-    public ResultModel<List<ACMsg>> getBanana(boolean refresh) throws Exception {
+    public ResultModel<List<ACMsg>> getBanana(@PathVariable boolean refresh) throws Exception {
         if(refresh) {
             AcfunArticleUtil.refresh();
         }
