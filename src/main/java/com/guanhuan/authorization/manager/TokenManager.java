@@ -1,9 +1,7 @@
 package com.guanhuan.authorization.manager;
 
 import com.guanhuan.authorization.entity.CheckResult;
-import com.guanhuan.authorization.entity.Token;
-import com.guanhuan.base.user.entity.User;
-import io.jsonwebtoken.Claims;
+import com.guanhuan.entity.User;
 
 /**
  * 对Token进行操作的接口

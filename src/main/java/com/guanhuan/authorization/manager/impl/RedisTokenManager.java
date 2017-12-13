@@ -2,15 +2,11 @@ package com.guanhuan.authorization.manager.impl;
 
 import com.guanhuan.authorization.entity.CheckResult;
 import com.guanhuan.authorization.manager.TokenManager;
-import com.guanhuan.base.user.entity.User;
+import com.guanhuan.entity.User;
 import com.guanhuan.common.utils.JwtUtil;
 import com.guanhuan.config.CheckStatus;
 import com.guanhuan.config.Constants;
-import com.guanhuan.model.ResultModel;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

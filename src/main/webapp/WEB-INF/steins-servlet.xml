@@ -4,19 +4,18 @@
 	   xmlns:context="http://www.springframework.org/schema/context"
 	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:mvc="http://www.springframework.org/schema/mvc"
-	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
   http://www.springframework.org/schema/beans/spring-beans.xsd
   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-  http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+  http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+">
 
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.guanhuan" />
 	<mvc:annotation-driven validator="validator" />
 	<tx:annotation-driven />
-
+	<context:component-scan base-package="com.guanhuan" />
 
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
@@ -43,10 +42,10 @@
 	</bean>
 
 	<!-- 爬虫浏览器 -->
-	<bean id="client" class="com.guanhuan.spider.service.HttpClientServiceImpl">
+	<bean id="client" class="com.guanhuan.inter.jpaimpl.HttpClientServiceImpl">
 		<!--出错控制类-->
 		<property name="handler">
-			<bean class="com.guanhuan.spider.bean.DefaultHander"/>
+			<bean class="com.guanhuan.component.DefaultHander"/>
 		</property>
 		<!--最大连接数-->
 		<property name="maxTotal" value="200"/>
