@@ -1,5 +1,6 @@
 package com.guanhuan.controller;
 
+import com.guanhuan.entity.AcfunSpider;
 import com.guanhuan.model.ResultModel;
 import com.guanhuan.entity.ACMsg;
 import com.guanhuan.inter.ACMsgService;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,9 @@ public class ACMsgController {
     @Autowired
     private ACMsgService service;
 
+    @Autowired
+    private AcfunSpider acfunSpider;
+
     /**
      * 获取已经登录的acfun用户的推送信息
      * @Date: 11:17 2017/11/13
@@ -36,7 +41,8 @@ public class ACMsgController {
      */
     @RequestMapping(value = "/acmsg/{page}/{size}", method = RequestMethod.GET)
     @ResponseBody
-    public ResultModel<List<ACMsg>> getACMsg(@PathVariable int page, @PathVariable int size){
+    public ResultModel<List<ACMsg>> getACMsg(@PathVariable int page, @PathVariable int size) throws IOException {
+        acfunSpider.running();
         return ResultModel.ok(service.findAllDesc(page,size));
     }
 

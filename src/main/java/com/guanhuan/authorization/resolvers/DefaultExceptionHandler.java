@@ -33,9 +33,12 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
         ResultModel.error(ResultStatus.SYS_ERROR);
         try {
             HttpUtil.returnErrorMessage(response, code, ex.getMessage());
+            logger.error("出现异常:"+ex.getMessage());
+            ex.printStackTrace();
         } catch (IOException e) {
-            logger.error("与客户端通讯异常:"+ e.getMessage(), e);
+            logger.error("resolveException异常:"+ e.getMessage(), e);
         }
+
         return new ModelAndView();
     }
 }

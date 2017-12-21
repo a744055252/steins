@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task-3.1.xsd"
+       default-lazy-init="false"
+>
+    <!--<task:annotation-driven />-->
+    <!--&lt;!&ndash;Spring 默认为单线程，配置定时任务的线程池&ndash;&gt;-->
+    <!--<task:scheduler id="poolTaskScheduler" pool-size="5"/>-->
+
+    <!--<bean name="spiderTask" class="com.guanhuan.component.task.SpiderTask"/>-->
+
+    <!-- quartz-->
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="spiderTask"/>
+        <property name="targetMethod" value="spiderAcfun"/>
+        <property name="concurrent" value="true"/>
+    </bean>
+
+    <!--<bean id="simpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="jobDetail"/>-->
+        <!--<property name="startDelay" value="0"/>-->
+        <!--<property name="repeatInterval" value="2000"/>-->
+    <!--</bean>-->
+
+    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDetail"/>
+        <property name="cronExpression" value="0 2 17 * * ?"/>
+    </bean>
+
+    <bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger"/>
+                <!--<ref bean="simpleTrigger"/>-->
+            </list>
+        </property>
+    </bean>
+
+</beans>

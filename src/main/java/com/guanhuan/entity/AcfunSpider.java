@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -135,6 +135,16 @@ public class AcfunSpider implements Spider{
             //将acMsgList顺序颠倒，这样保存进mysql的数据才是正确顺序。
             //实现分批爬取时，需要从新设计。
             Collections.reverse(acMsgList);
+//            LinkedList<ACMsg> temp = new LinkedList();
+//            int i = 0;
+//            for (ACMsg acMsg : acMsgList) {
+//                temp.add(acMsg);
+//                i++;
+//                if (i == acMsgList.size() || i % 10 == 0) {
+//                    acMsgService.addAll(temp);
+//                    temp.clear();
+//                }
+//            }
             acMsgService.addAll(acMsgList);
             logger.info("AcfunSpider spider success!");
             return true;
@@ -152,6 +162,7 @@ public class AcfunSpider implements Spider{
     private boolean getPush() throws IOException {
         boolean end = false;
         //已爬取的最新数据，用于判断是否结束爬取
+        //需要修改
         ACMsg topMsg = acMsgService.findTop();
 
         if(acMsgList == null){
