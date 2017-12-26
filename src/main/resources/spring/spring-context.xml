@@ -18,7 +18,7 @@
 		  
 	<context:annotation-config /> 
 
-	<context:component-scan base-package="com.guanhuan" />
+	<!--<context:component-scan base-package="com.guanhuan" />-->
 
 	<!-- 配置支持基于注解的事务 -->
 	<tx:annotation-driven/>

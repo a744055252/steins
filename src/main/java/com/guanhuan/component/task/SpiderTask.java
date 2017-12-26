@@ -4,6 +4,7 @@ import com.guanhuan.entity.AcfunSpider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class SpiderTask {
     @Autowired
     AcfunSpider acfunSpider;
 
+    @Scheduled(cron = "0 45 * * * ?")
     public void spiderAcfun() throws IOException {
         acfunSpider.running();
         logger.info("acfun spider success!");
