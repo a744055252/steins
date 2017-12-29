@@ -24,8 +24,8 @@ public enum ResultStatus {
     USER_NOT_AUTH(-2004, "用户无权限"),
     USER_EXPIRES_AUTH(-2005, "用户权限已过期"),
     USER_TOKEN_ERROR(-2006, "用户token错误"),
-    USER_OTHER_ERROR(-2007, "其他错误");
-
+    USER_OTHER_ERROR(-2007, "其他错误"),
+    USER_EMAIL_ERROR(-2008, "发送email错误");
 
     /**
      * 返回码

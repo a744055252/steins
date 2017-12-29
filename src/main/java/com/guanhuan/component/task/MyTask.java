@@ -3,7 +3,6 @@ package com.guanhuan.component.task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author liguanhuan_a@163.com
  * @create 2017-12-13 11:05
  **/
-@Component
+//@Component
 public class MyTask {
 
     /** logger */

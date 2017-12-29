@@ -6,7 +6,6 @@ import com.guanhuan.config.ResultStatus;
 import com.guanhuan.model.ResultModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,8 +22,7 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationInterceptor.class);
 
-    @Nullable
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, @Nullable Object handler, Exception ex) {
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 
         //将返回码转为负数
         int code = response.getStatus();

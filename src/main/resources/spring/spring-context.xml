@@ -18,13 +18,14 @@
 		  
 	<context:annotation-config /> 
 
-	<!--<context:component-scan base-package="com.guanhuan" />-->
+	<context:component-scan base-package="com.guanhuan" />
 
 	<!-- 配置支持基于注解的事务 -->
 	<tx:annotation-driven/>
 
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
 		<property name="locations">
 			<list>
 				<value>classpath:jdbc.properties</value>

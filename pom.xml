@@ -14,11 +14,18 @@
 
   <dependencies>
 
-    <!-- https://mvnrepository.com/artifact/javax.persistence/persistence-api -->
+    <!-- https://mvnrepository.com/artifact/javax.jms/javax.jms-api -->
     <dependency>
-      <groupId>javax.persistence</groupId>
-      <artifactId>persistence-api</artifactId>
-      <version>1.0</version>
+      <groupId>javax.jms</groupId>
+      <artifactId>javax.jms-api</artifactId>
+      <version>2.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.hibernate.javax.persistence/hibernate-jpa-2.1-api -->
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <version>1.0.0.Final</version>
     </dependency>
 
     <dependency>
@@ -44,12 +51,21 @@
       <artifactId>guava</artifactId>
       <version>18.0</version>
     </dependency>
+
+    <!--test -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.2</version>
-      <scope>test</scope>
+      <version>4.12</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>5.0.1.RELEASE</version>
+    </dependency>
+
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
@@ -92,19 +108,39 @@
       <version>5.0.1.RELEASE</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jms -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jms</artifactId>
+      <version>5.0.1.RELEASE</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-messaging -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-messaging</artifactId>
+      <version>5.0.1.RELEASE</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.xbean/xbean-spring -->
+    <dependency>
+      <groupId>org.apache.xbean</groupId>
+      <artifactId>xbean-spring</artifactId>
+      <version>4.6</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjrt</artifactId>
-      <version>1.7.3</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>1.8.13</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
     <dependency>
       <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <version>1.7.3</version>
-      <type>jar</type>
-      <scope>compile</scope>
+      <version>1.8.13</version>
     </dependency>
 
     <dependency>
@@ -162,7 +198,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.21</version>
-      <scope>test</scope>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
@@ -170,7 +205,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.21</version>
-      <scope>test</scope>
     </dependency>
 
     <!-- bcrypt 加密 -->
@@ -225,11 +259,6 @@
           <artifactId>htmlunit</artifactId>
           <version>2.27</version>
       </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-    </dependency>
 
     <!--spirng data jpa-->
     <dependency>
@@ -256,6 +285,18 @@
       <artifactId>jjwt</artifactId>
       <version>0.9.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>javax.el</groupId>
+      <artifactId>javax.el-api</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+    <!--<dependency>-->
+      <!--<groupId>org.glassfish.web</groupId>-->
+      <!--<artifactId>javax.el</artifactId>-->
+      <!--<version>2.2.4</version>-->
+    <!--</dependency>-->
 
     <!-- quartz-->
     <dependency>
@@ -293,6 +334,34 @@
       </dependency>
       <!--                         swagger结束                   -->
 
+
+    <!-- activemq -->
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-all -->
+    <!--<dependency>-->
+      <!--<groupId>org.apache.activemq</groupId>-->
+      <!--<artifactId>activemq-all</artifactId>-->
+      <!--<version>5.15.2</version>-->
+    <!--</dependency>-->
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-core -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-core</artifactId>
+      <version>5.7.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.activemq/activemq-pool -->
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-pool</artifactId>
+      <version>5.15.2</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+      <version>1.5.9.RELEASE</version>
+    </dependency>
 
   </dependencies>
   <build>
