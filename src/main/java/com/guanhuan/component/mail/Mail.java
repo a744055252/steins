@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Map;
+
 /**
  * 邮件实体
  *
@@ -29,9 +31,7 @@ public class Mail {
     /** 主题 */
     private String subject;
     /** 邮件数据 */
-//    private Map data ;
-    private String data;
+    private Map<String, String> data;
     /** 邮件模板 */
     private String template;
-
 }

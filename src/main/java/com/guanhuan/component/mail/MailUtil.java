@@ -1,18 +1,20 @@
 package com.guanhuan.component.mail;
 
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * mail工具类
@@ -31,7 +33,10 @@ public class MailUtil {
     @Autowired
     private JavaMailSender mailSender;
 
-    public boolean sendMail(Mail mail) throws MessagingException {
+    @Autowired
+    private FreeMarkerConfig freeMarkerConfigurer;
+
+    public boolean sendMail(Mail mail) throws MessagingException, IOException, TemplateException {
         MimeMessage msg = getMimeMessage(mail);
         if (msg == null) {
             return false;
@@ -41,29 +46,44 @@ public class MailUtil {
         return true;
     }
 
-    private MimeMessage getMimeMessage(Mail mail) throws MessagingException {
+    private MimeMessage getMimeMessage(Mail mail) throws MessagingException, IOException, TemplateException {
         MimeMessage msg = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(msg, true, DEFAULT_ENCODING);
-        try {
-            helper.setFrom(mail.getFrom(), mail.getFromName());
-        } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
+        helper.setFrom(mail.getFrom(), mail.getFromName());
+        if (mail == null) {
+            throw new NullPointerException("mail 不能为空");
         }
+
         helper.setSubject(mail.getSubject());
-        helper.setTo(mail.getToEmails());
-        helper.setBcc(mail.getToBcc());
-        //这里将发送的邮件抄送一份给自己，可以避免网易554错误
-        List<String> cc;
-        if(mail.getToCC() != null) {
-            cc = Arrays.asList(mail.getToCC());
-        } else {
-            cc = new ArrayList<String>();
+        if (mail.getToEmails() != null && mail.getToEmails().length != 0) {
+            helper.setTo(mail.getToEmails());
         }
-        cc.add(mail.getFrom());
-        String[] cctemp = new String[cc.size()+1];
-        helper.setCc(cc.toArray(cctemp));
+        if (mail.getToBcc() != null && mail.getToBcc().length != 0) {
+            helper.setBcc(mail.getToBcc());
+        }
+        //这里将发送的邮件抄送一份给自己，可以避免网易554错误
+        String[] cc = mail.getToCC();
+        String[] cctemp;
+        if (cc == null || cc.length == 0) {
+            cctemp = new String[1];
+            cctemp[0] = mail.getFrom();
+        } else {
+            cctemp = new String[cc.length+1];
+            System.arraycopy(cc, 0, cctemp, 0, cc.length);
+            cctemp[cc.length] = mail.getFrom();
+        }
+        helper.setCc(cctemp);
         //这里对模板进行解析
-        helper.setText(mail.getData(), true);
+        helper.setText(FreeMarkerHtml(mail.getData(), mail.getTemplate()), true);
         return msg;
     }
+
+    private String FreeMarkerHtml(Map<String, String> data,String tempName) throws IOException, TemplateException {
+        String html;
+        Template template = freeMarkerConfigurer.getConfiguration().
+                getTemplate(tempName);
+        html = FreeMarkerTemplateUtils.processTemplateIntoString(template, data);
+        return html;
+    }
+
 }

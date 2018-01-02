@@ -1,7 +1,9 @@
-package com.guanhuan.common.controller;
+package com.guanhuan.controller;
 
 import com.guanhuan.component.message.ConsumerService;
 import com.guanhuan.component.message.ProducerService;
+import com.guanhuan.component.message.impl.MessageServiceImpl;
+import com.guanhuan.config.ResultStatus;
 import com.guanhuan.model.ResultModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,9 @@ public class MessageController {
 
     @Resource(name= "consumerServiceActiveMQ")
     private ConsumerService consumerService;
+
+    @Autowired
+    private MessageServiceImpl messageService;
 
     @Autowired
     private Destination queueDestination;
@@ -84,6 +89,17 @@ public class MessageController {
     @RequestMapping(value = "/phoneTopic/{msg}", method = RequestMethod.PUT)
     public ResultModel<String> sendPhoneTopic(@PathVariable String msg) throws Exception {
         producerService.sendMessage(msg, topicDestination);
+        return ResultModel.ok();
+    }
+
+    @RequestMapping(value = "/emailMessage", method = RequestMethod.POST)
+    public ResultModel<?> sendEmail()  {
+        try {
+            producerService.sendMessage("744055252@qq.com", emailDestination);
+        } catch (Exception e) {
+            logger.error("发送邮件失败", e);
+            return ResultModel.error(ResultStatus.USER_EMAIL_ERROR);
+        }
         return ResultModel.ok();
     }
 }

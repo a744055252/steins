@@ -10,15 +10,20 @@ import org.springframework.stereotype.Component;
 import javax.jms.Destination;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * 使用BlokingQueue实现
+ * 使用BlokingQueue实现,使用java.util.Observable实现观察者模式。
  *
  * @author liguanhuan_a@163.com
+ * @see java.util.Observable
+ * @see com.guanhuan.component.message.ConsumerService
+ * @see com.guanhuan.component.message.ProducerService
  **/
 @Component("messageService")
-public class MessageServiceImpl implements ConsumerService, ProducerService {
+public class MessageServiceImpl extends Observable implements ConsumerService, ProducerService{
 
     private static Map<? super Destination,LinkedBlockingQueue<String>> destMap = null;
 
@@ -31,10 +36,11 @@ public class MessageServiceImpl implements ConsumerService, ProducerService {
     private static final int CAPACITY = 20;
 
     public MessageServiceImpl(){
-        this(CAPACITY);
+        this(CAPACITY, null);
     }
 
-    public MessageServiceImpl(int capacity) {
+    public MessageServiceImpl(int capacity, Observer observer) {
+        super.addObserver(observer);
         destMap = new HashMap<Destination, LinkedBlockingQueue<String>>();
         destMap.put(DEFAULT_DESTINATION, new LinkedBlockingQueue<String>(capacity));
     }
@@ -42,7 +48,7 @@ public class MessageServiceImpl implements ConsumerService, ProducerService {
     @SuppressWarnings("unchecked")
     public void sendMessage(String message) throws Exception {
         logger.debug("sendMessage:" + message);
-        LinkedBlockingQueue<String> defaultQueue = (LinkedBlockingQueue<String>) destMap.get(DEFAULT_DESTINATION);
+        LinkedBlockingQueue<String> defaultQueue = destMap.get(DEFAULT_DESTINATION);
         defaultQueue.put(message);
     }
 
