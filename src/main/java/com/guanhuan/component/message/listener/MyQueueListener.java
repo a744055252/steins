@@ -6,6 +6,7 @@ import com.guanhuan.component.message.impl.MessageServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.jms.Destination;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.Observer;
  * @author liguanhuan_a@163.com
  * @create 2018-01-02 17:44
  **/
+@Component
 public class MyQueueListener implements Observer {
 
     @Autowired
@@ -53,6 +55,6 @@ public class MyQueueListener implements Observer {
         } catch (Exception e) {
             logger.error(e.toString(), e);
         }
-
+        logger.debug("Listener running!");
     }
 }

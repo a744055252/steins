@@ -36,7 +36,7 @@ public class MessageController {
     @Resource(name= "consumerServiceActiveMQ")
     private ConsumerService consumerService;
 
-    @Autowired
+    @Resource(name = "messageServiceImpl")
     private MessageServiceImpl messageService;
 
     @Autowired
@@ -95,7 +95,7 @@ public class MessageController {
     @RequestMapping(value = "/emailMessage", method = RequestMethod.POST)
     public ResultModel<?> sendEmail()  {
         try {
-            producerService.sendMessage("744055252@qq.com", emailDestination);
+            messageService.sendMessage("744055252@qq.com", emailDestination);
         } catch (Exception e) {
             logger.error("发送邮件失败", e);
             return ResultModel.error(ResultStatus.USER_EMAIL_ERROR);

@@ -3,9 +3,7 @@ package com.guanhuan.component.message.impl;
 import com.guanhuan.component.message.ConsumerService;
 import com.guanhuan.component.message.ProducerService;
 import com.guanhuan.component.message.destination.MyDestination;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.jms.Destination;
 import java.util.HashMap;
@@ -16,40 +14,41 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 使用BlokingQueue实现,使用java.util.Observable实现观察者模式。
+ * ConsumerService和ProducerService不应该直接在MessageServiceImpl里实现。
  *
  * @author liguanhuan_a@163.com
  * @see java.util.Observable
  * @see com.guanhuan.component.message.ConsumerService
  * @see com.guanhuan.component.message.ProducerService
  **/
-@Component("messageService")
 public class MessageServiceImpl extends Observable implements ConsumerService, ProducerService{
 
-    private static Map<? super Destination,LinkedBlockingQueue<String>> destMap = null;
+    private Map<? super Destination,LinkedBlockingQueue<String>> destMap = null;
 
     private static final Destination DEFAULT_DESTINATION = new MyDestination();
     
-    /** logger */
-    private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private ThreadPoolTaskExecutor executor;
 
     /** 数组初始容量 */
     private static final int CAPACITY = 20;
 
     public MessageServiceImpl(){
-        this(CAPACITY, null);
+        this(CAPACITY, null, null);
     }
 
-    public MessageServiceImpl(int capacity, Observer observer) {
-        super.addObserver(observer);
-        destMap = new HashMap<Destination, LinkedBlockingQueue<String>>();
-        destMap.put(DEFAULT_DESTINATION, new LinkedBlockingQueue<String>(capacity));
+    public MessageServiceImpl(int capacity, Observer observer, ThreadPoolTaskExecutor executor) {
+        if (observer != null) {
+            super.addObserver(observer);
+        }
+        if(executor != null){
+            this.executor = executor;
+        }
+        this.destMap = new HashMap<Destination, LinkedBlockingQueue<String>>();
+        this.destMap.put(DEFAULT_DESTINATION, new LinkedBlockingQueue<String>(capacity));
     }
 
-    @SuppressWarnings("unchecked")
     public void sendMessage(String message) throws Exception {
-        logger.debug("sendMessage:" + message);
-        LinkedBlockingQueue<String> defaultQueue = destMap.get(DEFAULT_DESTINATION);
-        defaultQueue.put(message);
+        sendMessage(message, DEFAULT_DESTINATION);
     }
 
     public void sendMessage(String message, Destination destination) throws Exception {
@@ -59,6 +58,23 @@ public class MessageServiceImpl extends Observable implements ConsumerService, P
             destMap.put(destination, destQueue);
         }
         destQueue.put(message);
+
+        //触发前得修改状态
+        super.setChanged();
+        //触发所有的监听器
+        final Observable observable = this;
+        //开启线程，并发执行任务
+        if (executor != null) {
+            if(super.countObservers() != 0){
+                //当没有传入线程池的时候，同步执行
+                this.notifyObservers();
+            }
+            executor.execute(new Runnable() {
+                public void run() {
+                    observable.notifyObservers();
+                }
+            });
+        }
     }
 
     public String getMessage() throws Exception {
@@ -75,4 +91,11 @@ public class MessageServiceImpl extends Observable implements ConsumerService, P
         return destQueue.take();
     }
 
+    public void setExecutor(ThreadPoolTaskExecutor executor) {
+        this.executor = executor;
+    }
+
+    public void setObserver(Observer observer){
+        super.addObserver(observer);
+    }
 }
