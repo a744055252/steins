@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -23,8 +22,8 @@ import javax.jms.Destination;
  * @create 2017-12-27 9:54
  **/
 
-@RestController
-@RequestMapping("/Message")
+//@RestController
+//@RequestMapping("/Message")
 public class MessageController {
 
     /** logger */

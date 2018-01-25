@@ -36,13 +36,11 @@
 
 	<!-- 爬虫浏览器 -->
 	<bean id="client" class="com.guanhuan.inter.jpaimpl.HttpClientServiceImpl">
-		<!--出错控制类-->
-		<property name="handler">
-			<bean class="com.guanhuan.component.DefaultHander"/>
-		</property>
 		<!--最大连接数-->
-		<property name="maxTotal" value="200"/>
-		<property name="maxPerRoute" value="200"/>
+		<constructor-arg index="0" value="200"/>
+		<constructor-arg index="1" value="200"/>
+		<!--出错控制类-->
+		<constructor-arg index="2" ref="defaultHander"/>
 	</bean>
 
 	<bean class="org.springframework.context.support.ConversionServiceFactoryBean" />

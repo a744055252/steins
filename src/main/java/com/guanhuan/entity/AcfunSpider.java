@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +35,7 @@ import java.util.List;
 public class AcfunSpider implements Spider{
 
     /** 模拟浏览器 */
-    @Autowired
+    @Resource(name="client")
     private HttpClientService client;
 
     /** 登录账号 */
@@ -193,7 +194,12 @@ public class AcfunSpider implements Spider{
                 throw new RuntimeException("无法获取推送消息，错误代码:" + response.getStatusLine().getStatusCode());
             }
 
-            //应该从列表尾到列表头，这才是正确顺序
+            // 当爬取不到数据时，结束
+            if(temp.size() == 0){
+                break;
+            }
+
+                //应该从列表尾到列表头，这才是正确顺序
 //            for(int i = temp.size()-1; i > 0 ; i--){
             for(int i=0; i < temp.size(); i++){
                 //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
@@ -204,6 +210,8 @@ public class AcfunSpider implements Spider{
                 }
                 acMsgList.add(temp.get(i));
             }
+
+
         }
         return acMsgList != null || !acMsgList.isEmpty();
     }

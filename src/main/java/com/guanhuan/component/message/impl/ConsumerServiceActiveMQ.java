@@ -5,13 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.stereotype.Component;
 
 import javax.jms.Destination;
 import javax.jms.TextMessage;
 
 
-@Component
+//@Component
 public class ConsumerServiceActiveMQ implements ConsumerService{
 
     @Autowired

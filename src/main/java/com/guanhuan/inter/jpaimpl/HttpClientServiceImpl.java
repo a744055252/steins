@@ -20,8 +20,11 @@ import java.io.IOException;
  * @author liguanhuan_a@163.com
  * @create 2017-10-26 15:54
  **/
-@Service("HttpClientService")
+@Service
 public class HttpClientServiceImpl implements DisposableBean,HttpClientService {
+    
+    /** logger */
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientServiceImpl.class);
 
     private CloseableHttpClient client;
 
@@ -33,9 +36,11 @@ public class HttpClientServiceImpl implements DisposableBean,HttpClientService {
 
     private int maxPerRoute = 200;
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientServiceImpl.class);
+    public HttpClientServiceImpl(){
 
-    public  HttpClientServiceImpl(){
+    }
+
+    public HttpClientServiceImpl(int maxTotal, int maxPerRoute, HttpRequestRetryHandler handler){
         //连接池管理
         manager = new PoolingHttpClientConnectionManager();
         // 将最大连接数增加
@@ -45,12 +50,18 @@ public class HttpClientServiceImpl implements DisposableBean,HttpClientService {
         // 将目标主机的最大连接数增加
 //        entity.setMaxPerRoute(new HttpRoute(httpHost), maxRoute);
 
+        this.maxPerRoute = maxPerRoute;
+        this.maxTotal = maxTotal;
         this.handler = handler;
 
         client = HttpClients.custom()
                 .setConnectionManager(manager)
                 .setRetryHandler(handler)
                 .build();
+
+        logger.debug("client:" + client.toString() + "\r\n"
+                + "manager:" + manager.toString() + "\r\n"
+                + "handler:" + handler.toString());
     }
 
     public void release() {
@@ -78,10 +89,6 @@ public class HttpClientServiceImpl implements DisposableBean,HttpClientService {
         return handler;
     }
 
-    public void setHandler(HttpRequestRetryHandler handler) {
-        this.handler = handler;
-    }
-
     public int getMaxTotal() {
         return maxTotal;
     }
@@ -93,11 +100,6 @@ public class HttpClientServiceImpl implements DisposableBean,HttpClientService {
 
     public int getMaxPerRoute() {
         return maxPerRoute;
-    }
-
-    public void setMaxPerRoute(int maxPerRoute) {
-        manager.setDefaultMaxPerRoute(maxPerRoute);
-        this.maxPerRoute = maxPerRoute;
     }
 
 }
