@@ -34,9 +34,7 @@ import java.util.concurrent.TimeUnit;
  * 用户
  * 
  * @author guanhuan-li
- * @email liguanhuan_a@163.com
- * @date 2017年8月17日
- *
+ * @since  2017年8月17日
  */
 @RestController
 @RequestMapping("/User")
@@ -59,8 +57,8 @@ public class UserController {
 	/**
 	 * 添加用户
 	 * 
-	 * @param bindingResult
-	 * @param user
+	 * @param bindingResult bindingResult
+	 * @param user user
 	 * @return
 	 */
 	@RequestMapping(value="/user", method=RequestMethod.POST)
@@ -104,10 +102,8 @@ public class UserController {
 	}
 
 	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [response, account, password]
-	 * @Description:
-	 * @Date: 2017/10/14/014 20:39
+	 * @author liguanhuan_a@163.com
+	 * @since : 2017/10/14/014 20:39
 	 **/
 	@RequestMapping(value="/token", method=RequestMethod.POST)
 	public ResultModel<?> login(HttpServletResponse response, @RequestParam("account") String account,
@@ -144,10 +140,9 @@ public class UserController {
 	}
 
 	 /**
-	  * @Author: liguanhuan_a@163.com
-	  * @param:
-	  * @Description: 跳转注册页面
-	  * @Date: 2017/10/15/015 9:00
+	  * 跳转注册页面
+	  * @author liguanhuan_a@163.com
+	  * @since 2017/10/15/015 9:00
 	  **/
 	@RequestMapping("/register")
 	public ModelAndView register(){
@@ -158,10 +153,10 @@ public class UserController {
 	/**
 	 * 通过account查询用户是否已经存在
 	 * 
-	 * @param session
-	 * @param request
-	 * @param account
-	 * @return
+	 * @param session session
+	 * @param request request
+	 * @param account account
+	 * @return boolean
 	 */
 	@RequestMapping("/isExist/{account}")
 	public boolean isExist(HttpSession session, @CurrentUser User currentUser, HttpServletRequest request, @PathVariable String account) {

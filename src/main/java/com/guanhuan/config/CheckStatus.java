@@ -1,10 +1,12 @@
 package com.guanhuan.config;
 
+import com.google.common.base.Preconditions;
+
 /**
  * jwt的检查结果码
  *
- * @author
- * @create 2017-11-08 17:18
+ * @author guanhuan_li
+ * @since  2017-11-08 17:18
  **/
 public enum CheckStatus {
 
@@ -60,11 +62,12 @@ public enum CheckStatus {
 
     // 根据code返回枚举类型,主要在switch中使用
     public static CheckStatus getByValue(int code) {
-        for (CheckStatus checkStatus : values()) {
-            if (checkStatus.getCode() == code) {
-                return checkStatus;
+        CheckStatus checkStatus = null;
+        for (CheckStatus temp : values()) {
+            if (temp.getCode() == code) {
+                checkStatus = temp;
             }
         }
-        return null;
+        return Preconditions.checkNotNull(checkStatus);
     }
 }

@@ -10,7 +10,7 @@ import javax.jms.*;
  * topic 监听器
  *
  * @author liguanhuan_a@163.com
- * @create 2017-12-29 14:47
+ * @since 2017-12-29 14:47
  **/
 public class TopicMsgListener implements SessionAwareMessageListener {
     

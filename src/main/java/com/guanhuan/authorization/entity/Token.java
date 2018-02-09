@@ -1,12 +1,9 @@
 package com.guanhuan.authorization.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
-import java.util.Date;
 
 /**
  * token

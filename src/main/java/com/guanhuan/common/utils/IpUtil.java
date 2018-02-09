@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
  * ip工具类
  * 
  * @author guanhuan-li
- * @email liguanhuan_a@163.com
- * @date 2017年8月17日
+ * @since  2017年8月17日
  *
  */
 public class IpUtil {
@@ -17,9 +16,9 @@ public class IpUtil {
 	/**
 	 * 获取真实ip
 	 * 
-	 * @param request
-	 * @return
-	 * @throws Exception
+	 * @param request request
+	 * @return String ip地址
+	 * @throws Exception exception
 	 */
 	public static String getIpAddr(HttpServletRequest request) throws Exception {
 		String ip = request.getHeader("X-Real-IP");

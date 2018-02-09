@@ -1,6 +1,5 @@
 package com.guanhuan.component;
 
-import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.NoHttpResponseException;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
@@ -33,9 +32,6 @@ class DefaultHander implements HttpRequestRetryHandler {
             if (e instanceof UnknownHostException) {// 目标服务器不可达
                 return false;
             }
-            if (e instanceof ConnectTimeoutException) {// 连接被拒绝
-                return false;
-            }
             if (e instanceof SSLException) {// SSL握手异常
                 return false;
             }
@@ -44,9 +40,6 @@ class DefaultHander implements HttpRequestRetryHandler {
                     .adapt(httpContext);
             HttpRequest request = clientContext.getRequest();
             // 如果请求是幂等的，就再次尝试
-            if (!(request instanceof HttpEntityEnclosingRequest)) {
-                return true;
-            }
-            return false;
+            return !(request instanceof HttpEntityEnclosingRequest);
         }
     }

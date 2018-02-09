@@ -11,16 +11,16 @@ import java.io.PrintWriter;
 
 /**
  * @author liguanhuan_a@163.com
- * @create 2017-11-28 15:34
+ * @since  2017-11-28 15:34
  **/
 public class HttpUtil {
 
     /**
      * 往response中添加错误信息ResultModel
-     * @Date: 15:50 2017/11/28
-     * @param response
-     * @param code
-     * @param errorMessage
+     * @since : 15:50 2017/11/28
+     * @param response response
+     * @param code 错误码
+     * @param errorMessage 错误信息
      */
     public static void returnErrorMessage(HttpServletResponse response, int code,
                                           String errorMessage) throws IOException {

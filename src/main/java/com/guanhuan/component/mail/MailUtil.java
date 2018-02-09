@@ -20,12 +20,12 @@ import java.util.Map;
  * mail工具类
  *
  * @author liguanhuan_a@163.com
- * @create 2017-12-29 16:00
+ * @since  2017-12-29 16:00
  **/
 @Component
 public class MailUtil {
 
-    private static String DEFAULT_ENCODING = "UTF-8";
+    private static final String DEFAULT_ENCODING = "UTF-8";
 
     /** logger */
     private static final Logger logger = LoggerFactory.getLogger(MailUtil.class);
@@ -50,9 +50,6 @@ public class MailUtil {
         MimeMessage msg = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(msg, true, DEFAULT_ENCODING);
         helper.setFrom(mail.getFrom(), mail.getFromName());
-        if (mail == null) {
-            throw new NullPointerException("mail 不能为空");
-        }
 
         helper.setSubject(mail.getSubject());
         if (mail.getToEmails() != null && mail.getToEmails().length != 0) {

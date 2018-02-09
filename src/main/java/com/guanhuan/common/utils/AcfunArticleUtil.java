@@ -1,11 +1,11 @@
 package com.guanhuan.common.utils;
 
+import com.google.common.collect.Lists;
 import com.guanhuan.entity.ACMsg;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AcfunArticleUtil {
@@ -29,12 +29,12 @@ public class AcfunArticleUtil {
     private static List<ACMsg> bananaMsgList;
 
     static {
-        compMsgList = new ArrayList<ACMsg>();
-        workMsgList = new ArrayList<ACMsg>();
-        animeMsgList = new ArrayList<ACMsg>();
-        cartoonMsgList = new ArrayList<ACMsg>();
-        gameMsgList = new ArrayList<ACMsg>();
-        bananaMsgList = new ArrayList<ACMsg>();
+        compMsgList = Lists.newArrayList();
+        workMsgList = Lists.newArrayList();
+        animeMsgList = Lists.newArrayList();
+        cartoonMsgList = Lists.newArrayList();
+        gameMsgList = Lists.newArrayList();
+        bananaMsgList = Lists.newArrayList();
     }
 
     public static void refresh() throws Exception {
@@ -48,10 +48,7 @@ public class AcfunArticleUtil {
     }
 
     /**
-     * @Author: liguanhuan_a@163.com
-     * @param: []
-     * @Description:
-     * @Date: 2017/10/22/022 20:50
+     * @since: 2017/10/22/022 20:50
      **/
     private static void init() throws Exception {
 
@@ -114,10 +111,8 @@ public class AcfunArticleUtil {
     }
 
     /**
-     * @Author: liguanhuan_a@163.com
-     * @param: [elements]
-     * @Description: 初始化香蕉榜数据
-     * @Date: 2017/10/22/022 19:57
+     * 初始化香蕉榜数据
+     * @since: 2017/10/22/022 19:57
      **/
     private static void initBanana(Elements elements){
         Element a,img,fig;

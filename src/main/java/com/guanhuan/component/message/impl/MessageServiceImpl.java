@@ -12,6 +12,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * 使用BlokingQueue实现,使用java.util.Observable实现观察者模式。
  * ConsumerService和ProducerService不应该直接在MessageServiceImpl里实现。
@@ -37,12 +39,8 @@ public class MessageServiceImpl extends Observable implements ConsumerService, P
     }
 
     public MessageServiceImpl(int capacity, Observer observer, ThreadPoolTaskExecutor executor) {
-        if (observer != null) {
-            super.addObserver(observer);
-        }
-        if(executor != null){
-            this.executor = executor;
-        }
+        super.addObserver(checkNotNull(observer));
+        this.executor = checkNotNull(executor);
         this.destMap = new HashMap<Destination, LinkedBlockingQueue<String>>();
         this.destMap.put(DEFAULT_DESTINATION, new LinkedBlockingQueue<String>(capacity));
     }

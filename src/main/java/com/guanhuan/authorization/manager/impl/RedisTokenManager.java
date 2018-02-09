@@ -22,15 +22,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisTokenManager implements TokenManager {
 
-    @Autowired
-    private RedisTemplate<String, String> redis;
+    private final RedisTemplate<String, String> redis;
 
     private static final Logger logger = LoggerFactory.getLogger(RedisTokenManager.class);
+
+    @Autowired
+    public RedisTokenManager(RedisTemplate<String, String> redis) {
+        this.redis = redis;
+    }
 
     /**
      * 创建一个长时间有效的token，有效期为360小时（15天）
      * @Date: 17:46 2017/11/20
-     * @param user
+     * @param user 需要创建token的用户
      */
     public String createToken(User user) {
         //创建token
@@ -45,7 +49,7 @@ public class RedisTokenManager implements TokenManager {
     /**
      * 生成一个临时的token，有效期为3个小时
      * @Date: 17:48 2017/11/20
-     * @param user
+     * @param user 需要创建token的用户
      */
     public String createTempToken(User user) {
         //创建token

@@ -5,9 +5,8 @@ import com.guanhuan.entity.ACMsg;
 import java.util.List;
 
 /**
- *
- * @author
- * @create 2017-11-10 17:24
+ * @author guanhuan_li
+ * @since  2017-11-10 17:24
  **/
 public interface ACMsgService {
 

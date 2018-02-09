@@ -3,9 +3,9 @@ package com.guanhuan.inter;
 import java.io.IOException;
 
 /**
- * @Author: liguanhuan_a@163.com
- * @Description: 爬虫类的接口
- * @Date: 2017/10/15/015 22:24
+ * 爬虫类的接口
+ * @author liguanhuan_a@163.com
+ * @since 2017/10/15/015 22:24
  **/
 public interface Spider {
 

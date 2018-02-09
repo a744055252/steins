@@ -1,9 +1,10 @@
 package com.guanhuan.authorization.resolvers;
 
+import com.google.common.base.Strings;
 import com.guanhuan.authorization.annotation.CurrentUser;
+import com.guanhuan.config.Constants;
 import com.guanhuan.entity.User;
 import com.guanhuan.inter.UserService;
-import com.guanhuan.config.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -22,22 +23,25 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 @Component
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public CurrentUserMethodArgumentResolver(UserService userService) {
+        this.userService = userService;
+    }
 
     public boolean supportsParameter(MethodParameter parameter) {
         //如果参数类型是User并且有CurrentUser注解则支持
-        if (parameter.getParameterType().isAssignableFrom(User.class) &&
-                parameter.hasParameterAnnotation(CurrentUser.class)) {
-            return true;
-        }
-        return false;
+        return (parameter.getParameterType().isAssignableFrom(User.class) &&
+                parameter.hasParameterAnnotation(CurrentUser.class));
     }
 
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         //取出鉴权时存入的登录用户Id
-        Long currentUserId = new Long((String)webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST));
-        if (currentUserId != null) {
+        String strId = (String)webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST);
+
+        if (!Strings.isNullOrEmpty(strId)) {
+            Long currentUserId = new Long(strId);
             //从数据库中查询并返回
             return userService.findById(currentUserId);
         }

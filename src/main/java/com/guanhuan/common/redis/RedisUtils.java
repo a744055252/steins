@@ -6,13 +6,10 @@ import redis.clients.jedis.Jedis;
  * Redis 工具类
  * 
  * @author guanhuan-li
- * @email liguanhuan_a@163.com
- * @date 2017年8月11日
+ * @since  2017年8月11日
  *
  */
 public class RedisUtils {
-	
-	//private static final transient Log log = LogFactory.getLog(RedisUtils.class);
 	
 	private static final String REDIS_IP;
 	private static final String REDIS_SUCCESS;

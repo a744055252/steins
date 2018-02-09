@@ -1,13 +1,15 @@
 package com.guanhuan.common.utils;
 
+import org.apache.commons.lang.CharUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 用于转换中文与数字
+ * 用于转换中文与数字 11.1万 ——> 111000
  *
  * @author liguanhuan_a@163.com
- * @create 2017-11-23 11:02
+ * @since  2017-11-23 11:02
  **/
 public class NumberUtil {
 
@@ -24,15 +26,15 @@ public class NumberUtil {
 
     /**
      * 根据单位获取倍数
-     * @Date: 11:09 2017/11/23
-     * @param unitStr
+     * @since : 11:09 2017/11/23
+     * @param unitStr 单位
      */
     public static long getNumber(String unitStr){
         char[] units = unitStr.toCharArray();
         long multiple = 1;
         for(char unit : units){
             if(!unitNumber.containsKey(unit)){
-                throw new RuntimeException("NumberUtil不支持这样的单位："+unit);
+                throw new IllegalArgumentException("NumberUtil不支持这样的单位："+unit);
             }
             multiple *= unitNumber.get(unit);
         }
@@ -40,15 +42,17 @@ public class NumberUtil {
     }
 
     public static double toNumber(String strNumber){
-        int min = strNumber.length();
-        String num = null;
-        String unit = null;
-        for(Map.Entry<Character, Long> entry : unitNumber.entrySet()){
-            int temp = strNumber.indexOf(entry.getKey());
-            if(temp == -1)
-                continue;
-            min = min > temp ? temp : min;
+        int min = 0;
+        String num;
+        String unit;
+        char[] numberArray = strNumber.toCharArray();
+        for(char c : numberArray){
+            if(!(CharUtils.isAsciiNumeric(c) || c == '.')){
+                break;
+            }
+            min++;
         }
+
         num = strNumber.substring(0, min);
         unit = strNumber.substring(min, strNumber.length());
         double number = Double.parseDouble(num);
@@ -57,6 +61,6 @@ public class NumberUtil {
     }
 
     public static void main(String[] args){
-        System.out.println((long)toNumber("1.2千万"));
+        System.out.println((long)toNumber("1.2百"));
     }
 }

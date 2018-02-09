@@ -28,10 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
-    @Autowired
-    private TokenManager manager;
+    private final TokenManager manager;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationInterceptor.class);
+
+    @Autowired
+    public AuthorizationInterceptor(TokenManager manager) {
+        this.manager = manager;
+    }
 
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
@@ -58,12 +62,19 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             authorization = auth.getValue();
         }
 
-        String ip = null;
+        String ip;
+        CheckResult result;
+        result = manager.checkToken(authorization);
 
-        CheckResult result = manager.checkToken(authorization);
+        try {
+            ip = IpUtil.getIpAddr(request);
+        } catch (Exception e) {
+            logger.info("无法获取到IP地址",e);
+            return false;
+        }
+
         if(result.getCode() < 0){
             //设置状态码
-
             ResultModel resultModel;
             switch (CheckStatus.getByValue(result.getCode())){
                 case FAIL_EXPIRED :
@@ -80,15 +91,10 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
                     break;
             }
             HttpUtil.returnErrorMessage(response, resultModel);
-            try {
-                ip = IpUtil.getIpAddr(request);
-            } catch (Exception e) {
-                logger.info("无法获取到IP地址",e);
-                return false;
-            }
             logger.info("ip为：["+ip+"]的客户端未登陆");
             return false;
         }
+
         //成功解析
         logger.info("用户"+ip+"的id:"+result.getClaims().getSubject());
         request.setAttribute(Constants.CURRENT_USER_ID, result.getClaims().getSubject());

@@ -11,13 +11,13 @@ import java.util.concurrent.TimeUnit;
  * cookie工具类
  *
  * @author liguanhuan_a@163.com
- * @create 2017-11-10 14:42
+ * @since  2017-11-10 14:42
  **/
 public class CookieUtil {
 
     /**
      * 设置cookie
-     * @param response
+     * @param response response
      * @param name  cookie名字
      * @param value cookie值
      * @param maxAge cookie生命周期
@@ -32,15 +32,14 @@ public class CookieUtil {
 
     /**
      * 根据名字获取cookie
-     * @param request
+     * @param request request
      * @param name cookie名字
-     * @return
+     * @return Cookie
      */
     public static Cookie getCookieByName(HttpServletRequest request, String name){
         Map<String,Cookie> cookieMap = ReadCookieMap(request);
         if(cookieMap.containsKey(name)){
-            Cookie cookie = (Cookie)cookieMap.get(name);
-            return cookie;
+            return cookieMap.get(name);
         }else{
             return null;
         }
@@ -50,8 +49,8 @@ public class CookieUtil {
 
     /**
      * 将cookie封装到Map里面
-     * @param request
-     * @return
+     * @param request request
+     * @return Map map
      */
     private static Map<String,Cookie> ReadCookieMap(HttpServletRequest request){
         Map<String,Cookie> cookieMap = new HashMap<String,Cookie>();

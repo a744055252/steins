@@ -1,17 +1,5 @@
 package com.guanhuan.common.utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import com.guanhuan.entity.SpiderUser;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,10 +10,16 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 /**
- * @Author: liguanhuan_a@163.com
- * @Description: 爬虫工具类
- * @Date: 2017/10/15/015 18:05
+ * 爬虫工具类
+ *
+ * @author liguanhuan_a@163.com
+ * @since : 2017/10/15/015 18:05
  **/
 public class SpiderUtil {
 
@@ -35,27 +29,20 @@ public class SpiderUtil {
 	private static final Logger logger = LoggerFactory.getLogger(SpiderUtil.class);
 
 	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [url]
-	 * @Description: 通过url获取页面document
-	 * @Date: 2017/10/15/015 18:04
+	 * 通过url获取页面document
+	 * @param url url地址
+	 * @since : 2017/10/15/015 18:04
 	 **/
 	public static Document getDocument(String url) throws Exception {
-//		int timeOut = Integer.parseInt(getProperties("shop.properties","TIMEOUT"));
-		int timeOut = 5000;
-		Document doc = null;
-		doc = Jsoup.connect(url)
+		return Jsoup.connect(url)
 				.userAgent("Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)")
-				.timeout(timeOut)
+				.timeout(TIMEOUT)
 				.get();
-		return doc;
 	}
 
 	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [url]
-	 * @Description:
-	 * @Date: 2017/10/15/015 18:14
+	 * @param url url地址
+	 * @since : 2017/10/15/015 18:14
 	 **/
 	public static String getWordString(String url){
 		InputStream is;
@@ -71,7 +58,7 @@ public class SpiderUtil {
 			e1.printStackTrace();
 		}
 		StringBuilder sb = new StringBuilder();
-		String str = null;
+		String str;
 		try {
 			while(null != (str = bf.readLine())){
 			    sb.append(str);
@@ -89,16 +76,16 @@ public class SpiderUtil {
 	}
 
 	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [url]
-	 * @Description: 通过url获取到源文件的字符串
-	 * @Date: 2017/10/15/015 18:13
+	 * 通过url获取到源文件的字符串
+	 *
+	 * @param url url地址
+	 * @since : 2017/10/15/015 18:04
 	 **/
 	public static String getString(String url) throws Exception{
 		InputStream is = new URL(url).openStream();
 		StringBuilder sb = new StringBuilder();
 		try{
-			int cp = 0;
+			int cp;
 			while((cp = is.read()) != -1){
 				sb.append((char)cp);
 			}
@@ -110,10 +97,10 @@ public class SpiderUtil {
 	}
 
 	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [data, path, retain]
-	 * @Description: 将数据保持到path里，retain是否刷新
-	 * @Date: 2017/10/15/015 18:09
+	 * 将数据保持到path里，retain是否刷新
+	 *
+	 * @author liguanhuan_a@163.com
+	 * @since : 2017/10/15/015 18:09
 	 **/
 	public static boolean saveData(String data, String path, boolean retain){
 		File file = new File(path);
@@ -149,21 +136,13 @@ public class SpiderUtil {
 		return true;
 	}
 
-	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [data, path]
-	 * @Description: 保存数据到path中，加在path后面
-	 * @Date: 2017/10/15/015 18:10
-	 **/
 	public static boolean saveData(String data, String path){
 		return saveData(data, path, false);
 	}
 
 	/**
-	 * @Author: liguanhuan_a@163.com
-	 * @param: [fileName, attrKey]
-	 * @Description:
-	 * @Date: 2017/10/15/015 18:07
+	 * @author liguanhuan_a@163.com
+	 * @since 2017/10/15/015 18:07
 	 **/
 	public static String getProperties(String fileName, String attrKey) throws Exception{
 		ResourceBundle resource = ResourceBundle.getBundle("shop");
@@ -189,12 +168,12 @@ public class SpiderUtil {
 
 	/**
 	 * 增加消息头和相关配置
-	 * @Date: 15:43 2017/10/26
-	 * @param httpRequestBase
-	 * @param headPath
+	 * @since : 15:43 2017/10/26
+	 * @param httpRequestBase httpRequestBase
+	 * @param headPath headPath
 	 */
 	private static void config(HttpRequestBase httpRequestBase, String headPath, int timeout) {
-		Map<String, String> headMap = null;
+		Map<String, String> headMap;
 
 		//读取配置文件
 		headMap = SpiderUtil.getProperties(headPath);
@@ -221,9 +200,11 @@ public class SpiderUtil {
 
 	/**
 	 * 对response的返回结果进行过滤，返回码为200时返回true
-	 * @param: [response, result] result保存结果
-	 * @Date: 2017/10/28/028 12:05
+	 * @since : 2017/10/28/028 12:05
+	 *
+	 * 有问题不能再用 2018年2月9日15:25:05
 	 **/
+	@Deprecated
 	public static boolean checkCode(HttpRequestBase requestBase, CloseableHttpResponse response, SpiderUser user, String result) throws IOException {
 		boolean flag = false;
 		switch (response.getStatusLine().getStatusCode()){

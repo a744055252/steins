@@ -11,7 +11,7 @@ import java.util.Map;
  * 邮件实体
  *
  * @author liguanhuan_a@163.com
- * @create 2017-12-29 15:50
+ * @since 2017-12-29 15:50
  **/
 @Setter
 @Getter

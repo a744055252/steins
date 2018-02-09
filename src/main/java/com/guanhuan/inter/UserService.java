@@ -3,8 +3,8 @@ package com.guanhuan.inter;
 import com.guanhuan.entity.User;
 
 /**
- * @author
- * @create 2017-11-10 17:38
+ * @author guanhuan_li
+ * @since  2017-11-10 17:38
  **/
 public interface UserService {
 

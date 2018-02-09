@@ -1,12 +1,10 @@
 package com.guanhuan.controller;
 
-import com.guanhuan.entity.AcfunSpider;
-import com.guanhuan.model.ResultModel;
-import com.guanhuan.entity.ACMsg;
-import com.guanhuan.inter.ACMsgService;
 import com.guanhuan.common.utils.AcfunArticleUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.guanhuan.entity.ACMsg;
+import com.guanhuan.entity.AcfunSpider;
+import com.guanhuan.inter.ACMsgService;
+import com.guanhuan.model.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +17,11 @@ import java.util.Map;
  * 获取acfun消息
  *
  * @author liguanhuan_a@163.com
- * @create 2017-11-10 17:41
+ * @since  2017-11-10 17:41
  **/
 @RestController
 @RequestMapping("/ACMsg")
 public class ACMsgController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ACMsgController.class);
 
     @Autowired
     private ACMsgService service;
@@ -35,7 +31,7 @@ public class ACMsgController {
 
     /**
      * 获取已经登录的acfun用户的推送信息
-     * @Date: 11:17 2017/11/13
+     * @since 11:17 2017/11/13
      * @param page 页数，0为第一页
      * @param size 一页的大小，包含多少条推送数据
      */
@@ -48,8 +44,7 @@ public class ACMsgController {
 
     /**
      * 获取文章综合消息
-     * @Date: 11:18 2017/11/13
-     * @param
+     * @since 11:18 2017/11/13
      */
     @RequestMapping(value = "/comp", method = RequestMethod.GET)
     @ResponseBody
@@ -62,8 +57,7 @@ public class ACMsgController {
 
     /**
      * 获取文章工作情感消息
-     * @Date: 11:18 2017/11/13
-     * @param
+     * @since : 11:18 2017/11/13
      */
     @RequestMapping(value = "/work", method = RequestMethod.GET)
     @ResponseBody
@@ -76,8 +70,7 @@ public class ACMsgController {
 
     /**
      * 获取文章动漫文化消息
-     * @Date: 11:18 2017/11/13
-     * @param
+     * @since 11:18 2017/11/13
      */
     @RequestMapping(value = "/anime", method = RequestMethod.GET)
     @ResponseBody
@@ -90,8 +83,7 @@ public class ACMsgController {
 
     /**
      * 获取漫画小说消息
-     * @Date: 11:18 2017/11/13
-     * @param
+     * @since 11:18 2017/11/13
      */
     @RequestMapping(value = "/cartoon", method = RequestMethod.GET)
     @ResponseBody
@@ -104,8 +96,7 @@ public class ACMsgController {
 
     /**
      * 获取文章游戏消息
-     * @Date: 11:18 2017/11/13
-     * @param
+     * @since 11:18 2017/11/13
      */
     @RequestMapping(value = "/game", method = RequestMethod.GET)
     @ResponseBody
@@ -118,8 +109,7 @@ public class ACMsgController {
 
     /**
      * 获取香蕉榜消息
-     * @Date: 11:18 2017/11/13
-     * @param
+     * @since 11:18 2017/11/13
      */
     @RequestMapping(value = "/banana/{refresh}", method = RequestMethod.GET)
     @ResponseBody
@@ -141,8 +131,7 @@ public class ACMsgController {
         map.put("cartoon", AcfunArticleUtil.getCartoonMsgList());
         map.put("game", AcfunArticleUtil.getGameMsgList());
         map.put("banana", AcfunArticleUtil.getBananaMsgList());
-        ResultModel<Map<String, List<ACMsg>>> result = ResultModel.ok(map);
-        return result;
+        return ResultModel.ok(map);
     }
 
 }

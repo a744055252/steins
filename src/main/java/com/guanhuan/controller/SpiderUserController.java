@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
  * 爬虫用户
  *
  * @author liguanhuan_a@163.com
- * @create 2017-11-06 16:54
+ * @since 2017-11-06 16:54
  **/
 @RestController
 @RequestMapping("/SpiderUser")
@@ -31,8 +31,8 @@ public class SpiderUserController {
 
     /**
      * 新增爬虫用户
-     * @Date: 17:04 2017/11/6
-     * @param user
+     * @since 17:04 2017/11/6
+     * @param user 用户
      */
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseBody

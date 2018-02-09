@@ -29,7 +29,7 @@ import java.util.List;
  * Acfun推送爬取
  *
  * @author liguanhuan_a@163.com
- * @create 2017-10-27 17:05
+ * @since 2017-10-27 17:05
  **/
 @Component
 public class AcfunSpider implements Spider{
@@ -68,8 +68,7 @@ public class AcfunSpider implements Spider{
 
     /**
      * 登录
-     * @Date: 15:51 2017/11/10
-     * @param
+     * @since : 15:51 2017/11/10
      */
     public boolean login() throws IOException {
         if(loginUser == null || loginUser.isEmpty()){
@@ -157,8 +156,7 @@ public class AcfunSpider implements Spider{
 
     /**
      * 获取推送
-     * @Date: 15:51 2017/11/10
-     * @param
+     * @since 15:51 2017/11/10
      */
     private boolean getPush() throws IOException {
         boolean end = false;
@@ -201,14 +199,14 @@ public class AcfunSpider implements Spider{
 
                 //应该从列表尾到列表头，这才是正确顺序
 //            for(int i = temp.size()-1; i > 0 ; i--){
-            for(int i=0; i < temp.size(); i++){
+            for (ACMsg aTemp : temp) {
                 //当爬取数据id和上次爬取最后的一个数据一致，或者创建时间更晚。则结束
-                if(topMsg.getTerraceId().equals(temp.get(i).getTerraceId()) ||
-                        temp.get(i).getCreateTime() < topMsg.getCreateTime()){
+                if (topMsg.getTerraceId().equals(aTemp.getTerraceId()) ||
+                        aTemp.getCreateTime() < topMsg.getCreateTime()) {
                     end = true;
                     break;
                 }
-                acMsgList.add(temp.get(i));
+                acMsgList.add(aTemp);
             }
 
 
@@ -218,8 +216,7 @@ public class AcfunSpider implements Spider{
 
     /**
      * 签到
-     * @Date: 15:50 2017/11/10
-     * @param
+     * @since : 15:50 2017/11/10
      */
     public boolean sign() throws IOException {
         //签到请求
@@ -237,16 +234,13 @@ public class AcfunSpider implements Spider{
             temp = EntityUtils.toString(response.getEntity(), "UTF-8");
         }
 
-        if(temp != null){
-            return temp.indexOf("200")>0;
-        }
-        return false;
+        return temp != null && temp.indexOf("200")>0;
     }
 
     /**
      * 解析内容转换为ACMsg
-     * @Date: 15:52 2017/11/10
-     * @param content
+     * @since : 15:52 2017/11/10
+     * @param content 内容
      */
     private List<ACMsg> stringToACMsg(String content){
         JSONObject o = (JSONObject)JSONObject.parse(content);

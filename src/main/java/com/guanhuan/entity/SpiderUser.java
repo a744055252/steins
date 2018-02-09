@@ -14,7 +14,7 @@ import java.io.Serializable;
  * 爬虫登录的用户
  *
  * @author liguanhuan_a@163.com
- * @create 2017-10-27 17:15
+ * @since 2017-10-27 17:15
  **/
 @Entity
 @Getter

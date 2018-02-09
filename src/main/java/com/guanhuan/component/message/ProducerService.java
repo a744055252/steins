@@ -15,7 +15,7 @@ public interface ProducerService {
      * @param message 需要加入队列的数据
      * @throws Exception 发送数据出错
      */
-    void  sendMessage(final String message) throws Exception;
+    void sendMessage(final String message) throws Exception;
 
     /**
      * 向默认队列发送数据

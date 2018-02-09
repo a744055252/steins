@@ -21,17 +21,21 @@ import java.util.Map;
  * 发送邮件使用,需要完善
  *
  * @author liguanhuan_a@163.com
- * @create 2017-12-29 16:30
+ * @since  2017-12-29 16:30
  **/
 @RestController
 @RequestMapping("/Mail")
 public class MailController {
 
-    @Autowired
-    private MailUtil mailUtil;
+    private final MailUtil mailUtil;
     
     /** logger */
     private static final Logger logger = LoggerFactory.getLogger(MailController.class);
+
+    @Autowired
+    public MailController(MailUtil mailUtil) {
+        this.mailUtil = mailUtil;
+    }
 
     @RequestMapping(value = "/mail", method = RequestMethod.POST)
     public ResultModel<?> sendMail(){

@@ -14,8 +14,7 @@ import java.io.Serializable;
  * 用户类
  *
  * @author guanhuan-li
- * @email liguanhuan_a@163.com
- * @date 2017年8月16日
+ * @since  2017年8月16日
  */
 @Getter
 @Setter

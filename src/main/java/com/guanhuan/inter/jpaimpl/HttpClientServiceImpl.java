@@ -18,7 +18,7 @@ import java.io.IOException;
  * httpclient服务
  *
  * @author liguanhuan_a@163.com
- * @create 2017-10-26 15:54
+ * @since 2017-10-26 15:54
  **/
 @Service
 public class HttpClientServiceImpl implements DisposableBean,HttpClientService {

@@ -10,9 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @Author: liguanhuan_a@163.com
- * @Description: 爬取的消息
- * @Date: 2017/10/15/015 20:35
+ * 爬取的消息
+ * @author liguanhuan_a@163.com
+ * @since 2017/10/15/015 20:35
  **/
 @Entity
 @Getter

@@ -7,8 +7,8 @@ import java.io.IOException;
 
 /**
  * httpclient服务
- * @author
- * @create 2017-11-10 17:23
+ * @author guanhuan_li
+ * @since  2017-11-10 17:23
  **/
 public interface HttpClientService {
     void release();

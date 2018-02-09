@@ -1,14 +1,14 @@
 package com.guanhuan.model;
 
+import com.alibaba.fastjson.JSON;
 import com.guanhuan.config.ResultStatus;
 import lombok.Getter;
 
 import java.io.Serializable;
-import com.alibaba.fastjson.JSON;
 
 /**
  * 自定义返回结果
- * @date 2017-11-8 17:45:58
+ * @since 2017-11-8 17:45:58
  */
 @Getter
 public class ResultModel<T> implements Serializable {
@@ -67,8 +67,7 @@ public class ResultModel<T> implements Serializable {
 
     /**
      * 将ResultModel转换为json格式的字符串
-     * @Date: 16:29 2017/11/28
-     * @param
+     * @since : 16:29 2017/11/28
      */
     public String toString(){
         return JSON.toJSONString(this);

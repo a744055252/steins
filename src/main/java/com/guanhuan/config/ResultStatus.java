@@ -3,7 +3,7 @@ package com.guanhuan.config;
 /**
  * 自定义请求状态码
  * @author ScienJus
- * @date 2015/7/15.
+ * @since 2015/7/15.
  */
 public enum ResultStatus {
     SUCCESS(200, "成功"),
