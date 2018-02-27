@@ -9,6 +9,8 @@ import org.springframework.jms.core.JmsTemplate;
 import javax.jms.Destination;
 import javax.jms.TextMessage;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 //@Component
 public class ConsumerServiceActiveMQ implements ConsumerService{
@@ -30,12 +32,9 @@ public class ConsumerServiceActiveMQ implements ConsumerService{
     }
 
     public String getMessage(Destination destination) throws Exception {
-        if(destination == null){
-            throw new NullPointerException("destination不能为空");
-        }
+        checkNotNull(destination, "destination不能为空");
         TextMessage message = (TextMessage) jmsTemplate.receive(destination);
-        if(message ==null)
-            return "无法获取消息队列数据(超时或异常)";
+        checkNotNull(message,"无法获取消息队列数据(超时或异常)");
         String result = message.getText();
         message.acknowledge();
         return result;

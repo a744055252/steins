@@ -12,8 +12,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * 使用BlokingQueue实现,使用java.util.Observable实现观察者模式。
  * ConsumerService和ProducerService不应该直接在MessageServiceImpl里实现。
@@ -39,8 +37,8 @@ public class MessageServiceImpl extends Observable implements ConsumerService, P
     }
 
     public MessageServiceImpl(int capacity, Observer observer, ThreadPoolTaskExecutor executor) {
-        super.addObserver(checkNotNull(observer));
-        this.executor = checkNotNull(executor);
+        super.addObserver(observer);
+        this.executor = executor;
         this.destMap = new HashMap<Destination, LinkedBlockingQueue<String>>();
         this.destMap.put(DEFAULT_DESTINATION, new LinkedBlockingQueue<String>(capacity));
     }
@@ -63,15 +61,14 @@ public class MessageServiceImpl extends Observable implements ConsumerService, P
         final Observable observable = this;
         //开启线程，并发执行任务
         if (executor != null) {
-            if(super.countObservers() != 0){
-                //当没有传入线程池的时候，同步执行
-                this.notifyObservers();
-            }
             executor.execute(new Runnable() {
                 public void run() {
                     observable.notifyObservers();
                 }
             });
+        } else {
+            //当没有传入线程池的时候，同步执行
+            observable.notifyObservers();
         }
     }
 

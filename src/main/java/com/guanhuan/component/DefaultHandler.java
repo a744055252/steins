@@ -15,7 +15,7 @@ import java.io.InterruptedIOException;
 import java.net.UnknownHostException;
 
 @Component
-class DefaultHander implements HttpRequestRetryHandler {
+public class DefaultHandler implements HttpRequestRetryHandler {
         public boolean retryRequest(IOException e, int i, HttpContext httpContext) {
             if (i >= 5) {// 如果已经重试了5次，就放弃
                 return false;

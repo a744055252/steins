@@ -10,6 +10,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 //@Component
 public class ProducerServiceActiveMQ implements ProducerService{
 
@@ -26,6 +28,7 @@ public class ProducerServiceActiveMQ implements ProducerService{
     }
 
     public void sendMessage(final String message, Destination destination) throws Exception {
+        checkNotNull(message, "destination不能为空");
         jmsTemplate.send(destination, new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
                 return session.createTextMessage(message);

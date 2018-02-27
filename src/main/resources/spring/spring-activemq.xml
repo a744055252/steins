@@ -36,9 +36,10 @@
 	 </property>
 	</bean>
 
-	<!-- 自己实现的队列 -->
+	<!--消息队列的监听器-->
 	<bean id="myQueueListener" class="com.guanhuan.component.message.listener.MyQueueListener"/>
 
+	<!-- 自己实现的消息队列 -->
 	<bean id="messageServiceImpl" class="com.guanhuan.component.message.impl.MessageServiceImpl">
 		<constructor-arg name="capacity" value="20"/>
 		<constructor-arg name="executor" ref="taskExecutor"/>

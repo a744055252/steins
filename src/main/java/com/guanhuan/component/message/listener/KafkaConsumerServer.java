@@ -8,7 +8,6 @@ import org.springframework.kafka.listener.MessageListener;
 /**
  * kafka监听器启动
  * 自动监听是否有消息需要消费
- * @author wangb
  *
  */
 public class KafkaConsumerServer implements MessageListener<String, String> {

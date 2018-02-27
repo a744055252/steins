@@ -6,6 +6,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import javax.jms.Destination;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * kafka实现的Producer
  *
@@ -22,6 +24,7 @@ public class ProducerServiceKafka implements ProducerService {
     }
 
     public void sendMessage(String message, Destination destination) throws Exception {
+        checkNotNull(destination, "destination不能为空");
         kafkaTemplate.send(destination.getClass().getSimpleName(), message);
     }
 }

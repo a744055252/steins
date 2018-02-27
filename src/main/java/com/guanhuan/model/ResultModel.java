@@ -67,7 +67,7 @@ public class ResultModel<T> implements Serializable {
 
     /**
      * 将ResultModel转换为json格式的字符串
-     * @since : 16:29 2017/11/28
+     * @since 16:29 2017/11/28
      */
     public String toString(){
         return JSON.toJSONString(this);

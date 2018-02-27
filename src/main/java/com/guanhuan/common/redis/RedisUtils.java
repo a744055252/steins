@@ -1,5 +1,7 @@
 package com.guanhuan.common.redis;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -16,16 +18,18 @@ public class RedisUtils {
 
 	private static final Jedis jedis;
 	
+	/** logger */
+	private static final Logger logger = LoggerFactory.getLogger(RedisUtils.class);
 	
 	static {
 		REDIS_IP = "127.0.0.1";
 		jedis = new Jedis(REDIS_IP);
 		REDIS_SUCCESS = "PONG";
 		if(REDIS_SUCCESS.equals(jedis.ping())) {
-			System.out.println("Redis running! connect success!");
+			logger.info("Redis running! connect success!");
 		}
 		else {
-			System.out.println("Redis error! ");
+			logger.info("Redis error! ");
 		}
 	}
 	

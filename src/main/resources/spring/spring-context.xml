@@ -40,7 +40,7 @@
 		<constructor-arg index="0" value="200"/>
 		<constructor-arg index="1" value="200"/>
 		<!--出错控制类-->
-		<constructor-arg index="2" ref="defaultHander"/>
+		<constructor-arg index="2" ref="defaultHandler"/>
 	</bean>
 
 	<bean class="org.springframework.context.support.ConversionServiceFactoryBean" />
@@ -141,16 +141,16 @@
 	</bean>
 
 	<aop:config>
-		<aop:pointcut id="txMethod" expression="execution(* com.guanhuan.common.db.*.*(..))" />
+		<aop:pointcut id="txMethod" expression="execution(* com.guanhuan.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txMethod"/>
 	</aop:config>
 	<!-- AOP切面声明事务管理 -->
 	<tx:advice id="txAdvice">
 		<tx:attributes>
 			<tx:method name="save*"  /> <!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
-			<tx:method name="update*"  /><!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
-			<tx:method name="add*"  /><!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
-			<tx:method name="delete*"  /><!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
+			<tx:method name="update*"  /><!-- 支持当前事务，如果执行到update开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
+			<tx:method name="add*"  /><!-- 支持当前事务，如果执行到add开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
+			<tx:method name="delete*"  /><!-- 支持当前事务，如果执行到delete开头的任何方法时没有事务则开启一个事务 这是最常见的方式-->
 			<tx:method name="find*"  read-only="true"/> <!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
 			<tx:method name="get*"  read-only="true"/><!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
 			<tx:method name="*" />

@@ -7,7 +7,6 @@ import org.springframework.kafka.support.ProducerListener;
 
 /**
  * kafkaProducer监听器，在producer配置文件中开启
- * @author wangb
  *
  */
 @SuppressWarnings("rawtypes")
