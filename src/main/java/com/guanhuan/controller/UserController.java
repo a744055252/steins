@@ -9,7 +9,7 @@ import com.guanhuan.common.utils.DateUtil;
 import com.guanhuan.common.utils.IpUtil;
 import com.guanhuan.config.Constants;
 import com.guanhuan.config.ResultStatus;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import com.guanhuan.entity.AcfunSpider;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;

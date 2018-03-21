@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * 基于FIFO(先进先出算法)的缓存
+ * 注意 继承工具类是一个错误的做法。
  *
  * @author liguanhuan_a@163.com
  * @since 2018-02-28 16:47

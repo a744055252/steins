@@ -3,7 +3,7 @@ package com.guanhuan.authorization.resolvers;
 import com.guanhuan.authorization.interceptor.AuthorizationInterceptor;
 import com.guanhuan.common.utils.HttpUtil;
 import com.guanhuan.config.ResultStatus;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerExceptionResolver;

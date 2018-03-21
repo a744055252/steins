@@ -4,7 +4,7 @@ import com.guanhuan.common.utils.AcfunArticleUtil;
 import com.guanhuan.entity.ACMsg;
 import com.guanhuan.entity.AcfunSpider;
 import com.guanhuan.inter.ACMsgService;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

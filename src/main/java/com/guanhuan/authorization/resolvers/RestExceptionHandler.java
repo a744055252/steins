@@ -3,7 +3,7 @@ package com.guanhuan.authorization.resolvers;
 import java.io.IOException;
 
 import com.guanhuan.config.ResultStatus;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;

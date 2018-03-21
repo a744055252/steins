@@ -1,4 +1,4 @@
-package com.guanhuan.model;
+package com.guanhuan.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.guanhuan.config.ResultStatus;

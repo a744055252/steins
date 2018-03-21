@@ -1,7 +1,7 @@
 package com.guanhuan.common.controller;
 
 import com.guanhuan.config.ResultStatus;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;

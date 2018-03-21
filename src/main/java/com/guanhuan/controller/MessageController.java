@@ -4,7 +4,7 @@ import com.guanhuan.component.message.ConsumerService;
 import com.guanhuan.component.message.ProducerService;
 import com.guanhuan.component.message.impl.MessageServiceImpl;
 import com.guanhuan.config.ResultStatus;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

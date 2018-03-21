@@ -14,6 +14,8 @@ public class PrintTest {
                 .getConstructor(new Class[]{Integer.class});
         Test test = (Test) constructor.newInstance(1);
         test.print();
+        int[][] a;
+
     }
 
     class Test{

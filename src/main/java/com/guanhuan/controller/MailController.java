@@ -3,7 +3,7 @@ package com.guanhuan.controller;
 import com.guanhuan.component.mail.Mail;
 import com.guanhuan.component.mail.MailUtil;
 import com.guanhuan.config.ResultStatus;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import freemarker.template.TemplateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

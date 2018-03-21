@@ -1,7 +1,7 @@
 package com.guanhuan.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.guanhuan.model.ResultModel;
+import com.guanhuan.entity.ResultModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
